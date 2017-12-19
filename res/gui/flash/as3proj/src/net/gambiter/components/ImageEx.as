@@ -1,25 +1,21 @@
 ﻿package net.gambiter.components
 {
 	import flash.display.Loader;
-	import flash.net.URLRequest;
-	import flash.events.IOErrorEvent;
 	import flash.events.Event;
-	
-	import scaleform.clik.constants.InvalidationType;
-	
-	import net.gambiter.FlashUI;
+	import flash.events.IOErrorEvent;
+	import flash.net.URLRequest;
 	
 	import net.gambiter.core.UIComponentEx;
 	
 	public class ImageEx extends UIComponentEx
-	{		
-		public var loader:Loader;
+	{
+		private var loader:Loader;
 		
-		private var _source:String;		
+		private var _source:String;
 		private var _sourceAlt:String;
-		private var _autoSize:Boolean;		
-		private var _loadFailed:Boolean;		
-		private var _loadInProgress:Boolean;		
+		private var _autoSize:Boolean;
+		private var _loadFailed:Boolean;
+		private var _loadInProgress:Boolean;
 		private var _previousContentUnloaded:Boolean;
 		
 		public function ImageEx()
@@ -27,16 +23,14 @@
 			super();
 			
 			loader = new Loader();
+			loader.name = "image";
 			addChild(loader);
 			
 			_source = "";
 			_sourceAlt = "";
-			
 			_autoSize = true;
-			
 			_loadFailed = false;
 			_loadInProgress = false;
-			
 			_previousContentUnloaded = true;
 			
 			addLoaderListener();
@@ -48,7 +42,7 @@
 		}
 		
 		override protected function onDispose():void
-		{			
+		{
 			if (loader != null)
 			{
 				removeLoaderListener();
@@ -58,11 +52,10 @@
 			}
 			super.onDispose();
 		}
-
 		
 		override public function refresh():void
-		{			
-			if (_loadFailed || _loadInProgress) return;			
+		{
+			if (_loadFailed || _loadInProgress) return;
 			if (_autoSize)
 			{
 				loader.width = _originalWidth;
@@ -74,14 +67,6 @@
 				loader.height = _height || _originalHeight;
 			}
 			super.refresh();
-		}
-		
-		override protected function updateRect() : void
-        {
-			borderRect.x = loader.x;
-			borderRect.y = loader.y;
-			borderRect.width = loader.width;
-			borderRect.height = loader.height;
 		}
 		
 		private function startLoad(url:String):void
@@ -194,7 +179,7 @@
 		private function onLoaderCompleteHandler(e:Event):void
 		{
 			_loadFailed = false;
-			_loadInProgress = false;					
+			_loadInProgress = false;
 			initialize();
 			refresh();
 			loadComplete();

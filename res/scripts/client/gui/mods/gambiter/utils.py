@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 
 
-IS_DEBUG = True
+IS_DEBUG = False
 
 
 def LOG(arg, *args):

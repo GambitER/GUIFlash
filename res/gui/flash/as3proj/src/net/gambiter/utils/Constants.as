@@ -1,5 +1,6 @@
 ﻿package net.gambiter.utils
 {
+	
 	public class Constants
 	{
 		public static const ALIGN_LEFT:String = "left";
