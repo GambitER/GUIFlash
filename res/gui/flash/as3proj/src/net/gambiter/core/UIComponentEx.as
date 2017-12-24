@@ -90,8 +90,6 @@
 		public function updateVisible():void
 		{
 			super.visible = _visible && (!FlashUI.ui.showFullStats || _fullStats) && (!FlashUI.ui.showRadialMenu || _radialMenu);
-			
-			FlashUI.ui.py_log(alias, super.visible);
 		}
 		
 		private function updateIndex():void
