@@ -5,6 +5,7 @@
 	import flash.events.IOErrorEvent;
 	import flash.net.URLRequest;
 	
+	import net.gambiter.utils.Properties;	
 	import net.gambiter.core.UIComponentEx;
 	
 	public class ImageEx extends UIComponentEx
@@ -13,7 +14,6 @@
 		
 		private var _source:String;
 		private var _sourceAlt:String;
-		private var _autoSize:Boolean;
 		private var _loadFailed:Boolean;
 		private var _loadInProgress:Boolean;
 		private var _previousContentUnloaded:Boolean;
@@ -28,7 +28,6 @@
 			
 			_source = "";
 			_sourceAlt = "";
-			_autoSize = true;
 			_loadFailed = false;
 			_loadInProgress = false;
 			_previousContentUnloaded = true;
@@ -53,20 +52,25 @@
 			super.onDispose();
 		}
 		
-		override public function refresh():void
+		override protected function updateBorder():void
+		{
+			borderEx.update(loader.x, loader.y, loader.width, loader.height);
+		}
+		
+		override protected function updateSize():void
 		{
 			if (_loadFailed || _loadInProgress) return;
-			if (_autoSize)
+			if (autoSize)
 			{
 				loader.width = _originalWidth;
 				loader.height = _originalHeight;
 			}
 			else
 			{
-				loader.width = _width || _originalWidth;
-				loader.height = _height || _originalHeight;
+				loader.width = width;
+				loader.height = height;
 			}
-			super.refresh();
+			super.updateSize();
 		}
 		
 		private function startLoad(url:String):void
@@ -110,72 +114,6 @@
 			loader.contentLoaderInfo.removeEventListener(Event.UNLOAD, onLoaderUnloadHandler);
 		}
 		
-		override public function set width(arg:Number):void
-		{
-			_autoSize = false;
-			super.width = arg;
-		}
-		
-		override public function set height(arg:Number):void
-		{
-			_autoSize = false;
-			super._height = arg;
-		}
-		
-		public function get autoSize():Boolean
-		{
-			return _autoSize;
-		}
-		
-		public function set autoSize(arg:Boolean):void
-		{
-			_autoSize = arg;
-		}
-		
-		public function get image():String
-		{
-			return source;
-		}
-		
-		public function set image(url:String):void
-		{
-			source = url;
-		}
-		
-		public function get imageAlt():String
-		{
-			return sourceAlt;
-		}
-		
-		public function set imageAlt(url:String):void
-		{
-			sourceAlt = url;
-		}
-		
-		public function get source():String
-		{
-			return _source;
-		}
-		
-		public function set source(url:String):void
-		{
-			_loadFailed = false;
-			if (!url || url == _source) return;
-			startLoad(url);
-		}
-		
-		public function get sourceAlt():String
-		{
-			return _sourceAlt;
-		}
-		
-		public function set sourceAlt(url:String):void
-		{
-			if (!url || _sourceAlt == url) return;
-			_sourceAlt = url;
-			if (_loadFailed) startLoad(url);
-		}
-		
 		private function onLoaderCompleteHandler(e:Event):void
 		{
 			_loadFailed = false;
@@ -198,6 +136,30 @@
 		private function onLoaderUnloadHandler(e:Event):void
 		{
 			_previousContentUnloaded = true;
+		}
+		
+		public function get image():String
+		{
+			return _source;
+		}
+		
+		public function set image(url:String):void
+		{
+			_loadFailed = false;
+			if (!url || url == _source) return;
+			startLoad(url);
+		}
+		
+		public function get imageAlt():String
+		{
+			return _sourceAlt;
+		}
+		
+		public function set imageAlt(url:String):void
+		{
+			if (!url || _sourceAlt == url) return;
+			_sourceAlt = url;
+			if (_loadFailed) startLoad(url);
 		}
 	}
 }

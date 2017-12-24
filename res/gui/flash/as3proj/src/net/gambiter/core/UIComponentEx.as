@@ -1,8 +1,5 @@
 ﻿package net.gambiter.core
 {
-	import flash.display.Shape;
-	import flash.geom.Rectangle;
-	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.display.InteractiveObject;
@@ -11,16 +8,17 @@
 	import net.wg.infrastructure.interfaces.entity.IDraggable;
 	
 	import net.gambiter.FlashUI;
-	import net.gambiter.utils.Constants;
-	
+	import net.gambiter.utils.Align;	
+	import net.gambiter.core.UIBorderEx;	
 	import scaleform.clik.core.UIComponent;
 	
 	public class UIComponentEx extends UIComponent implements IDraggable
 	{
-		private var borderEx:Shape;
+		protected var borderEx:UIBorderEx;
 		
 		private var _x:Number;
 		private var _y:Number;
+		private var _autoSize:Boolean;
 		private var _alignX:String;
 		private var _alignY:String;
 		private var _drag:Boolean;
@@ -28,26 +26,31 @@
 		private var _border:Boolean;
 		private var _tooltip:String;
 		private var _alias:String;
-		private var _index:Number;
+		private var _index:Number;		
 		
-		protected var _rect:Rectangle;
+		private var _visible:Boolean;
+		private var _fullStats:Boolean;
+		private var _radialMenu:Boolean;
 		
 		public function UIComponentEx()
 		{
 			super();
 			
-			borderEx = new Shape();
-			borderEx.visible = false;
+			borderEx = new UIBorderEx();
 			addChild(borderEx);
-			
-			_rect = new Rectangle();
 			
 			_x = 0;
 			_y = 0;
 			_drag = false;
+			_border = false;
+			_autoSize = true;
 			_isDragging = false;
-			_alignX = Constants.ALIGN_LEFT;
-			_alignY = Constants.ALIGN_TOP;
+			_alignX = Align.LEFT;
+			_alignY = Align.TOP;
+			
+			_visible = true;
+			_fullStats = false;
+			_radialMenu = false;
 			
 			focusable = false;
 		}
@@ -77,72 +80,65 @@
 		
 		public function refresh():void
 		{
+			updateVisible();
+			updateIndex();
+			updateSize();
+			updateBorder();
 			updatePosition();
 		}
 		
-		protected function updateRect():void
+		public function updateVisible():void
 		{
-			_rect = getBounds(parent);
-			_rect.x = Math.round(_rect.x - x);
-			_rect.y = Math.round(_rect.y - y);
-			_rect.width = Math.round(_rect.width);
-			_rect.height = Math.round(_rect.height);
-		}
-		
-		private function showBorder():void
-		{
-			borderEx.graphics.clear();
+			super.visible = _visible && (!FlashUI.ui.showFullStats || _fullStats) && (!FlashUI.ui.showRadialMenu || _radialMenu);
 			
-			updateRect();
-			
-			borderEx.graphics.beginFill(0x999999, 0.1);
-			borderEx.graphics.lineStyle(1, 0x999999, 1, true);
-			borderEx.graphics.drawRect(_rect.x, _rect.y, _rect.width, _rect.height);
-			borderEx.graphics.endFill();
-			
-			borderEx.visible = true;
-		}
-		
-		private function hideBorder():void
-		{
-			if (borderEx.visible) borderEx.visible = false;
-		}
-		
-		private function updateProps(props:Object):void
-		{
-			FlashUI.ui.py_update(_alias, props);
+			FlashUI.ui.py_log(alias, super.visible);
 		}
 		
 		private function updateIndex():void
 		{
-			parent.setChildIndex(this, _index || parent.numChildren - 1);
+			if (_index) parent.setChildIndex(this, Math.min(_index, parent.numChildren - 1));
+		}
+		
+		protected function updateSize():void
+		{
+			null;
+		}
+		
+		protected function updateBorder():void
+		{
+			null;
 		}
 		
 		private function updatePosition():void
 		{
-			if (_alignX == Constants.ALIGN_LEFT) super.x = Math.round(_x);
-			else if (_alignX == Constants.ALIGN_CENTER) super.x = Math.round(_x + (parent.width - width) * 0.5);
-			else if (_alignX == Constants.ALIGN_RIGHT) super.x = Math.round(_x + parent.width - width);
+			if (_alignX == Align.LEFT) super.x = Math.round(_x);
+			else if (_alignX == Align.CENTER) super.x = Math.round(_x + (parent.width - width) * 0.5);
+			else if (_alignX == Align.RIGHT) super.x = Math.round(_x + parent.width - width);
 			
-			if (_alignY == Constants.ALIGN_TOP) super.y = Math.round(_y);
-			else if (_alignY == Constants.ALIGN_CENTER) super.y = Math.round(_y + (parent.height - height) * 0.5);
-			else if (_alignY == Constants.ALIGN_BOTTOM) super.y = Math.round(_y + parent.height - height);
+			if (_alignY == Align.TOP) super.y = Math.round(_y);
+			else if (_alignY == Align.CENTER) super.y = Math.round(_y + (parent.height - height) * 0.5);
+			else if (_alignY == Align.BOTTOM) super.y = Math.round(_y + parent.height - height);
 		}
 		
-		private function getPosition():void
+		private function updateProps():void
 		{
 			var _x_:Number = _x;
 			var _y_:Number = _y;
 			
-			if (_alignX == Constants.ALIGN_LEFT) _x = Math.round(super.x);
-			else if (_alignX == Constants.ALIGN_CENTER) _x = Math.round(super.x - (parent.width - width) * 0.5);
-			else if (_alignX == Constants.ALIGN_RIGHT) _x = Math.round(super.x - parent.width + width);
+			if (_alignX == Align.LEFT) _x = Math.round(super.x);
+			else if (_alignX == Align.CENTER) _x = Math.round(super.x - (parent.width - width) * 0.5);
+			else if (_alignX == Align.RIGHT) _x = Math.round(super.x - parent.width + width);
 			
-			if (_alignY == Constants.ALIGN_TOP) _y = Math.round(super.y);
-			else if (_alignY == Constants.ALIGN_CENTER) _y = Math.round(super.y - (parent.height - height) * 0.5);
-			else if (_alignY == Constants.ALIGN_BOTTOM) _y = Math.round(super.y - parent.height + height);
+			if (_alignY == Align.TOP) _y = Math.round(super.y);
+			else if (_alignY == Align.CENTER) _y = Math.round(super.y - (parent.height - height) * 0.5);
+			else if (_alignY == Align.BOTTOM) _y = Math.round(super.y - parent.height + height);
 			
-			if ((_x != _x_) || (_y != _y_)) updateProps({"x": _x, "y": _y});
+			if ((_x != _x_) || (_y != _y_)) py_updateProps({"x": _x, "y": _y});
+		}
+		
+		private function py_updateProps(props:Object):void
+		{
+			FlashUI.ui.py_update(alias, props);
 		}
 		
 		private function onResize(event:Event):void
@@ -153,21 +149,21 @@
 		public function hideCursor():void
 		{
 			App.toolTipMgr.hide();
+			borderEx.hide();
 			onEndDrag();
-			hideBorder();
 		}
 		
 		private function onMouseOver(event:MouseEvent):void
 		{
 			if (!FlashUI.ui.showCursor) return;
 			if (_tooltip && !_isDragging) App.toolTipMgr.show(_tooltip);
-			if (_border) showBorder();
+			if (_border) borderEx.show();
 		}
 		
 		private function onMouseOut(event:MouseEvent):void
 		{
 			if (_tooltip) App.toolTipMgr.hide();
-			hideBorder();
+			if (_border) borderEx.hide();
 		}
 		
 		public function getHitArea():InteractiveObject
@@ -199,12 +195,7 @@
 			if (!_isDragging) return;
 			_isDragging = false;
 			stopDrag();
-			getPosition();
-		}
-		
-		public function set drag(value:Boolean):void
-		{
-			if (_drag != value) _drag = value;
+			updateProps();
 		}
 		
 		public function get drag():Boolean
@@ -212,9 +203,9 @@
 			return _drag;
 		}
 		
-		public function set tooltip(value:String):void
+		public function set drag(value:Boolean):void
 		{
-			if (_tooltip != value) _tooltip = value;
+			if (value != _drag) _drag = value;
 		}
 		
 		public function get tooltip():String
@@ -222,9 +213,9 @@
 			return _tooltip;
 		}
 		
-		public function set alias(value:String):void
+		public function set tooltip(value:String):void
 		{
-			if (_alias != value) _alias = value;
+			if (value != _tooltip) _tooltip = value;
 		}
 		
 		public function get alias():String
@@ -232,9 +223,9 @@
 			return _alias;
 		}
 		
-		public function set border(value:Boolean):void
+		public function set alias(value:String):void
 		{
-			if (value != _border) _border = value;
+			if (value != _alias) _alias = value;
 		}
 		
 		public function get border():Boolean
@@ -242,11 +233,9 @@
 			return _border;
 		}
 		
-		public function set index(value:Number):void
+		public function set border(value:Boolean):void
 		{
-			if (value == _index) return;
-			_index = value;
-			updateIndex();
+			if (value != _border) _border = value;
 		}
 		
 		public function get index():Number
@@ -254,10 +243,9 @@
 			return _index;
 		}
 		
-		public function set alignX(value:String):void
+		public function set index(value:Number):void
 		{
-			if (value != Constants.ALIGN_LEFT && value != Constants.ALIGN_CENTER && value != Constants.ALIGN_RIGHT) return;
-			if (_alignX != value) _alignX = value;
+			if (value != _index) _index = value;
 		}
 		
 		public function get alignX():String
@@ -265,15 +253,41 @@
 			return _alignX;
 		}
 		
-		public function set alignY(value:String):void
+		public function set alignX(value:String):void
 		{
-			if (value != Constants.ALIGN_TOP && value != Constants.ALIGN_CENTER && value != Constants.ALIGN_BOTTOM) return;
-			if (alignY != value) _alignY = value;
+			if ((Align.isValidH(value)) && (value != _alignX)) _alignX = value;
 		}
 		
 		public function get alignY():String
 		{
 			return _alignY;
+		}
+		
+		public function set alignY(value:String):void
+		{
+			if ((Align.isValidV(value)) && (value != _alignY)) _alignY = value;
+		}
+		
+		public function get autoSize():Boolean
+		{
+			return _autoSize;
+		}
+		
+		public function set autoSize(value:Boolean):void
+		{
+			if (value != _autoSize) _autoSize = value;
+		}
+		
+		override public function set width(value:Number):void
+		{
+			_autoSize = false;
+			super.width = value;
+		}
+		
+		override public function set height(value:Number):void
+		{
+			_autoSize = false;
+			super.height = value;
 		}
 		
 		override public function set x(value:Number):void
@@ -284,6 +298,31 @@
 		override public function set y(value:Number):void
 		{
 			_y = value;
+		}
+		
+		override public function set visible(value:Boolean):void
+		{
+			_visible = value;
+		}
+		
+		public function get fullStats():Boolean
+		{
+			return _fullStats;
+		}
+		
+		public function set fullStats(value:Boolean):void
+		{
+			if (value != _fullStats) _fullStats = value;
+		}
+		
+		public function get radialMenu():Boolean
+		{
+			return _radialMenu;
+		}
+		
+		public function set radialMenu(value:Boolean):void
+		{
+			if (value != _radialMenu) _radialMenu = value;
 		}
 	}
 }

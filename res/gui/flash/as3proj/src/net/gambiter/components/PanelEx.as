@@ -8,6 +8,8 @@
 		public function PanelEx()
 		{
 			super();
+			
+			borderEx.obj = this;
 		}
 	}
 }

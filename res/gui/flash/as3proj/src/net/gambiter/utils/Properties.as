@@ -8,7 +8,7 @@
 	import net.gambiter.core.UIComponentEx;
 	
 	public class Properties
-	{		
+	{
 		public static function setShadow(obj:DisplayObject, args:Object):void
 		{
 			if (!obj || !args) return;

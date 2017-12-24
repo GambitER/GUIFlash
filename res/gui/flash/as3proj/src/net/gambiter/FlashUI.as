@@ -82,13 +82,13 @@
 		public function as_fullStats(arg:Boolean):void
 		{
 			if (arg != showFullStats) showFullStats = arg;
-			for (var alias:String in components) components[alias].visible = !(showFullStats || showRadialMenu);
+			for (var alias:String in components) components[alias].updateVisible();
 		}
 		
 		public function as_radialMenu(arg:Boolean):void
 		{
 			if (arg != showRadialMenu) showRadialMenu = arg;
-			for (var alias:String in components) components[alias].visible = !(showFullStats || showRadialMenu);
+			for (var alias:String in components) components[alias].updateVisible();
 		}
 		
 		public function as_create(alias:String, type:String, props:Object):void
