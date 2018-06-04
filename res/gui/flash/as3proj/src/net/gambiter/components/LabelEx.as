@@ -4,6 +4,7 @@
 	import flash.text.TextFormat;
 	import flash.text.GridFitType;
 	import flash.text.AntiAliasType;
+	import flash.text.TextFieldAutoSize;
 	
 	import scaleform.gfx.TextFieldEx;
 	
@@ -33,18 +34,24 @@
 			_hAlign = Align.LEFT;
 			_vAlign = Align.TOP;
 			
-			textField.mouseEnabled = false;
+			textField.width = 0;
+			textField.height = 0;
 			
+			textField.mouseEnabled = false;
+						
 			textField.wordWrap = false;
 			textField.multiline = false;
 			textField.selectable = false;
+			textField.background = false;
+			textField.backgroundColor = 0x000000;
 			
 			textField.embedFonts = true;
-			textField.gridFitType = GridFitType.PIXEL; 
+			textField.gridFitType = GridFitType.PIXEL;
+			textField.autoSize = TextFieldAutoSize.LEFT;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			
 			textField.defaultTextFormat = new TextFormat("$UniversCondC", 12, 0xFFFFFF, false, false, false, "", "", "left", 0, 0, 0, 0);
-			Properties.setShadow(textField, {"distance": 4, "angle": 45, "color": 0, "alpha": 1, "blurX": 4, "blurY": 4, "strength": 1, "quality": 1});
+			Properties.setShadow(textField, {"distance": 4, "angle": 45, "color": 0x999999, "alpha": 1, "blurX": 4, "blurY": 4, "strength": 1, "quality": 1});
 		}
 		
 		override protected function configUI():void
@@ -71,7 +78,7 @@
 		{
 			if (text == null || textField == null) return;
 			if (isHtml) textField.htmlText = text;
-			else textField.text = text;
+			else textField.text = text;			
 			initialize();
 		}
 		
@@ -81,14 +88,16 @@
 		}
 		
 		override protected function updateSize():void
-		{
+		{			
 			if (autoSize)
 			{
-				textField.width = _originalWidth;
-				textField.height = _originalHeight;
+				textField.autoSize = TextFieldAutoSize.LEFT;
+				// textField.width = _originalWidth;
+				// textField.height = _originalHeight;
 			}
 			else
 			{
+				textField.autoSize = TextFieldAutoSize.NONE;
 				textField.width = width;
 				textField.height = height;
 			}
@@ -165,6 +174,26 @@
 		public function get wordWrap():Boolean
 		{
 			return textField.wordWrap;
+		}
+		
+		public function set background(value:Boolean):void
+		{
+			if (value != textField.background) textField.background = value;
+		}
+		
+		public function get background():Boolean
+		{
+			return textField.background;
+		}
+		
+		public function set backgroundColor(value:uint):void
+		{
+			if (value != textField.backgroundColor) textField.backgroundColor = value;
+		}
+		
+		public function get backgroundColor():uint
+		{
+			return textField.backgroundColor;
 		}
 		
 		public function set shadow(args:Object):void

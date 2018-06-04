@@ -9,7 +9,7 @@ from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as SPACE_ID
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.managers.loaders import ViewLoadParams
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ViewTypes, ScopeTemplates
 from utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR
 
@@ -41,7 +41,7 @@ class COMPONENT_STATE(object):
     INIT = 1
     LOAD = 2
     UNLOAD = 3
-
+    DESTROY = 4
 
 class COMPONENT_EVENT(object):
     LOADED = Event.Event()
@@ -50,17 +50,21 @@ class COMPONENT_EVENT(object):
 
 
 class Cache(object):
+
     def __init__(self):
         self.components = {}
 
-    def create(self, alias, type, props):
+    def create(self, alias, type, props):        
         self.components[alias] = {'type': type, 'props': props}
+        LOG_DEBUG('GUIFlash :', 'Cache "%s" [%s] created. Parameters: %s' % (alias, type, props))
 
-    def update(self, alias, props):
+    def update(self, alias, props):        
         self.components[alias].get('props').update(props)
+        LOG_DEBUG('GUIFlash :', 'Cache "%s" updated. Parameters: %s' % (alias, props))
 
-    def delete(self, alias):
+    def delete(self, alias):        
         del self.components[alias]
+        LOG_DEBUG('GUIFlash :', 'Cache "%s" deleted.' % alias)
 
     def isComponent(self, alias):
         return alias in self.components
@@ -94,6 +98,7 @@ class Cache(object):
 
 
 class Views(object):
+
     def __init__(self):
         self.ui = None
 
@@ -105,14 +110,17 @@ class Views(object):
     def create(self, alias, type, props):
         if self.ui is not None:
             self.ui.as_createS(alias, type, props)
+            LOG_DEBUG('GUIFlash :', 'Component "%s" [%s] created. Parameters: %s' % (alias, type, props))
 
     def update(self, alias, props):
         if self.ui is not None:
             self.ui.as_updateS(alias, props)
+            LOG_DEBUG('GUIFlash :', 'Component "%s" updated. Parameters: %s' % (alias, props))
 
     def delete(self, alias):
         if self.ui is not None:
             self.ui.as_deleteS(alias)
+            LOG_DEBUG('GUIFlash :', 'Component "%s" deleted.' % alias)
 
     def cursor(self, isShow):
         if self.ui is not None:
@@ -128,6 +136,7 @@ class Views(object):
 
 
 class Hooks(object):
+
     def _start(self):
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         g_appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
@@ -185,6 +194,7 @@ class Hooks(object):
 
 
 class Events(object):
+
     def goToLogin(self):
         pass
 
@@ -195,7 +205,7 @@ class Events(object):
         pass
 
     def goToBattle(self):
-        g_appLoader.getApp().loadView(ViewLoadParams(CONSTANTS.VIEW_ALIAS))
+        g_appLoader.getApp().loadView(SFViewLoadParams(CONSTANTS.VIEW_ALIAS))
 
     def leaveLobby(self):
         pass
@@ -214,16 +224,17 @@ class Events(object):
 
 
 class Settings(object):
+
     def _start(self):
         g_entitiesFactories.addSettings(
-            ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, ViewTypes.WINDOW, None,
-                         ScopeTemplates.GLOBAL_SCOPE))
+            ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, ViewTypes.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
 
     def _destroy(self):
         g_entitiesFactories.removeSettings(CONSTANTS.VIEW_ALIAS)
 
 
 class Flash_Meta(View):
+
     def py_log(self, *args):
         self._printOverrideError('py_log')
 
@@ -256,6 +267,7 @@ class Flash_Meta(View):
 
 
 class Flash_UI(Flash_Meta):
+
     def _populate(self):
         super(Flash_UI, self)._populate()
         g_guiHooks._populate()
@@ -276,6 +288,7 @@ class Flash_UI(Flash_Meta):
 
 
 class GUIFlash(object):
+
     def __init__(self):
         g_guiSettings._start()
         g_guiHooks._start()

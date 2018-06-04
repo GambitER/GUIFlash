@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 
 
-IS_DEBUG = True
+IS_DEBUG = False
 
 
 def LOG(arg, *args):
@@ -22,7 +22,9 @@ def LOG_DEBUG(*args):
 
 
 def LOG_TRACE(exc=None):
+
     import traceback
+
     print('=') * 25
     if exc is not None:
         LOG_ERROR(exc)
@@ -44,6 +46,7 @@ def LOG_DIR(object, include=None, exclude=None):
 
 
 def debugLog(func):
+
     def wrapper(*args, **kwargs):
         try:
             func(*args, **kwargs)
@@ -55,6 +58,7 @@ def debugLog(func):
 
 
 def debugTime(func):
+
     def wrapper(*args, **kwargs):
         import time
         startTime = time.time()
@@ -65,6 +69,7 @@ def debugTime(func):
 
 
 class EventHook(object):
+
     def __init__(self):
         self.__handlers = []
 
@@ -141,7 +146,9 @@ def _OverrideClassMethod(handler, cls, method):
 
 
 def _hook_decorator(func):
+
     def decorator1(*a, **k):
+
         def decorator2(handler):
             func(handler, *a, **k)
 

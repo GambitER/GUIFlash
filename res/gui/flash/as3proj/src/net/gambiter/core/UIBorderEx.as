@@ -14,27 +14,29 @@
 			super();
 			
 			visible = false;
-			_rect = new Rectangle(0, 0, 100, 100);
+			_rect = new Rectangle(0, 0, 0, 0);
 		
 		}
 		
-		public function show():void
+		private function draw():void
 		{
-			if (obj) _rect = obj.getRect(obj);
-			
 			graphics.clear();
 			graphics.beginFill(0x999999, 0.1);
 			graphics.lineStyle(1, 0x999999, 1, true);
 			graphics.drawRect(_rect.x, _rect.y, _rect.width, _rect.height);
 			graphics.endFill();
-			
+		}
+		
+		public function show():void
+		{
+			if (obj) _rect = obj.getRect(obj);			
+			draw();			
 			visible = true;
 		}
 		
 		public function hide():void
 		{
-			graphics.clear();
-			
+			graphics.clear();			
 			visible = false;			
 		}
 		

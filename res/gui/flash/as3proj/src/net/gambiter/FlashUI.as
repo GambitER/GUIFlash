@@ -7,7 +7,7 @@
 	
 	import net.wg.infrastructure.managers.impl.ContainerManagerBase;
 	import net.wg.gui.components.containers.MainViewContainer;
-	import net.wg.data.constants.ContainerTypes;
+	import net.wg.data.constants.generated.APP_CONTAINERS_NAMES;
 	import net.wg.infrastructure.base.AbstractView;
 	
 	public class FlashUI extends AbstractView
@@ -56,7 +56,7 @@
 			try
 			{
 				parent.removeChild(this);
-				viewContainer = (App.containerMgr as ContainerManagerBase).containersMap[ContainerTypes.VIEW];
+				viewContainer = (App.containerMgr as ContainerManagerBase).containersMap[APP_CONTAINERS_NAMES.VIEWS];
 				viewContainer.setFocusedView(viewContainer.getTopmostView());
 				viewPage = viewContainer.getChildByName("main") as DisplayObjectContainer;
 			}
@@ -74,7 +74,8 @@
 		public function as_cursor(arg:Boolean):void
 		{
 			if (arg != showCursor) showCursor = arg;
-			if (showCursor) null; // App.cursor.loader.hitTestObject / App.cursor.loader.hitTestPoint
+			if (showCursor)
+				null; // App.cursor.loader.hitTestObject / App.cursor.loader.hitTestPoint
 			else
 				for (var alias:String in components) components[alias].hideCursor();
 		}

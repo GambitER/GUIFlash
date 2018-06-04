@@ -76,6 +76,7 @@
 		override protected function draw():void
 		{
 			super.draw();
+			refresh();
 		}
 		
 		public function refresh():void
@@ -92,9 +93,9 @@
 			super.visible = _visible && (!FlashUI.ui.showFullStats || _fullStats) && (!FlashUI.ui.showRadialMenu || _radialMenu);
 		}
 		
-		private function updateIndex():void
+		private function updateIndex():void		
 		{
-			if (_index) parent.setChildIndex(this, Math.min(_index, parent.numChildren - 1));
+			if ((_index != undefined) && (_index != parent.getChildIndex(this))) parent.setChildIndex(this, Math.min(_index, parent.numChildren - 1));
 		}
 		
 		protected function updateSize():void
