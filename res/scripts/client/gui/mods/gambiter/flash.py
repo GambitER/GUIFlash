@@ -56,15 +56,15 @@ class Cache(object):
     def __init__(self):
         self.components = {}
 
-    def create(self, alias, type, props):        
+    def create(self, alias, type, props):
         self.components[alias] = {'type': type, 'props': props}
         LOG_DEBUG('GUIFlash :', 'Cache "%s" [%s] created. Parameters: %s' % (alias, type, props))
 
-    def update(self, alias, props):        
+    def update(self, alias, props):
         self.components[alias].get('props').update(props)
         LOG_DEBUG('GUIFlash :', 'Cache "%s" updated. Parameters: %s' % (alias, props))
 
-    def delete(self, alias):        
+    def delete(self, alias):
         del self.components[alias]
         LOG_DEBUG('GUIFlash :', 'Cache "%s" deleted.' % alias)
 
@@ -118,6 +118,11 @@ class Views(object):
         if self.ui is not None:
             self.ui.as_updateS(alias, props)
             LOG_DEBUG('GUIFlash :', 'Component "%s" updated. Parameters: %s' % (alias, props))
+
+    def animate(self, alias, delay, props, isFrom=False):
+        if self.ui is not None:
+            self.ui.as_animateS(alias, delay, props, isFrom)
+            LOG_DEBUG('GUIFlash :', 'Component "%s" animated. Parameters: %s' % (alias, props))
 
     def delete(self, alias):
         if self.ui is not None:
@@ -275,6 +280,10 @@ class Flash_Meta(View):
         if self._isDAAPIInited():
             return self.flashObject.as_update(alias, props)
 
+    def as_animateS(self, alias, delay, props, isFrom=False):
+        if self._isDAAPIInited():
+            return self.flashObject.as_animate(alias, delay, props, isFrom)
+
     def as_deleteS(self, alias):
         if self._isDAAPIInited():
             return self.flashObject.as_delete(alias)
@@ -348,6 +357,13 @@ class GUIFlash(object):
         if g_guiCache.isComponent(alias):
             g_guiCache.update(alias, props)
             g_guiViews.update(alias, props)
+        else:
+            LOG_ERROR('GUIFlash :', 'Component "%s" not found!' % alias)
+
+    def animateComponent(self, alias, delay, props, isFrom=False):
+        if g_guiCache.isComponent(alias):
+            g_guiCache.update(alias, props)
+            g_guiViews.animate(alias, delay, props, isFrom)
         else:
             LOG_ERROR('GUIFlash :', 'Component "%s" not found!' % alias)
 

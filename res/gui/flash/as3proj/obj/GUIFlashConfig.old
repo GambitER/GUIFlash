@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'04.04.2019'</value>
+      <value>'24.04.2019'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -34,22 +34,22 @@
     <omit-trace-statements>true</omit-trace-statements>
     <verbose-stacktraces>false</verbose-stacktraces>
     <source-path append="true">
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\src</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\src</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
     <external-library-path append="true">
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\swc\wg\base_app-1.0-SNAPSHOT.swc</path-element>
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\swc\wg\battle.swc</path-element>
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\swc\wg\common_i18n_library-1.0-SNAPSHOT.swc</path-element>
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\swc\wg\common-1.0-SNAPSHOT.swc</path-element>
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\swc\wg\gui_base-1.0-SNAPSHOT.swc</path-element>
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\swc\wg\gui_battle-1.0-SNAPSHOT.swc</path-element>
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\swc\wg\gui_lobby-1.0-SNAPSHOT.swc</path-element>
-      <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\swc\wg\lobby.swc</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\swc\wg\base_app-1.0-SNAPSHOT.swc</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\swc\wg\battle.swc</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\swc\wg\common_i18n_library-1.0-SNAPSHOT.swc</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\swc\wg\common-1.0-SNAPSHOT.swc</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\swc\wg\gui_base-1.0-SNAPSHOT.swc</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\swc\wg\gui_battle-1.0-SNAPSHOT.swc</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\swc\wg\gui_lobby-1.0-SNAPSHOT.swc</path-element>
+      <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\swc\wg\lobby.swc</path-element>
     </external-library-path>
   </compiler>
   <file-specs>
-    <path-element>E:\OneDrive\WoT_Mods\GUIFlash\source\res\gui\flash\as3proj\src\net\gambiter\FlashUI.as</path-element>
+    <path-element>D:\Code\Pycharm Python\WoT_mods\GUIFlash\res\gui\flash\as3proj\src\net\gambiter\FlashUI.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>50</default-frame-rate>
