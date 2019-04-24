@@ -18,16 +18,16 @@
 		{
 			switch (value)
 			{
-			case COMPONENT_TYPE_PANEL: 
-				return new PanelEx();
-			case COMPONENT_TYPE_LABEL: 
-				return new LabelEx();
-			case COMPONENT_TYPE_IMAGE: 
-				return new ImageEx();
-			// case COMPONENT_TYPE_SHAPE: 
-			//	return new ShapeEx();
-			default: 
-				return null;
+				case COMPONENT_TYPE_PANEL:
+					return new PanelEx();
+				case COMPONENT_TYPE_LABEL:
+					return new LabelEx();
+				case COMPONENT_TYPE_IMAGE:
+					return new ImageEx();
+				// case COMPONENT_TYPE_SHAPE:
+				//	return new ShapeEx();
+				default: 
+					return null;
 			}
 		}
 	}

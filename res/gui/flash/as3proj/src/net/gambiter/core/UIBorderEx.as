@@ -1,8 +1,8 @@
 ﻿package net.gambiter.core
 {
-	import flash.display.Shape;
-	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
+	import flash.display.Shape;
+	import flash.display.DisplayObject;	
 	
 	public class UIBorderEx extends Shape
 	{
@@ -14,8 +14,7 @@
 			super();
 			
 			visible = false;
-			_rect = new Rectangle(0, 0, 0, 0);
-		
+			_rect = new Rectangle(0, 0, 0, 0);		
 		}
 		
 		private function draw():void
@@ -29,7 +28,7 @@
 		
 		public function show():void
 		{
-			if (obj) _rect = obj.getRect(obj);			
+			if (_obj) _rect = _obj.getRect(_obj);			
 			draw();			
 			visible = true;
 		}
@@ -38,12 +37,12 @@
 		{
 			graphics.clear();			
 			visible = false;			
-		}
+		}		
 		
 		public function update(_x_:Number, _y_:Number, _w_:Number, _h_:Number):void
 		{
 			_rect = new Rectangle(_x_, _y_, _w_, _h_);
-		}
+		}	
 		
 		public function get obj():DisplayObject
 		{

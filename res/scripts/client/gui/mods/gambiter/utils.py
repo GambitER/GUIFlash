@@ -4,6 +4,7 @@
 IS_DEBUG = False
 
 
+
 def LOG(arg, *args):
     print str(arg), ' '.join([str(arg) for arg in args])
 
@@ -22,9 +23,7 @@ def LOG_DEBUG(*args):
 
 
 def LOG_TRACE(exc=None):
-
     import traceback
-
     print('=') * 25
     if exc is not None:
         LOG_ERROR(exc)
