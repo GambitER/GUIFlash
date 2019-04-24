@@ -122,6 +122,11 @@
 			if (viewPage) updateComponent(alias, props);
 		}
 		
+		public function as_animate(alias:String, delay:Number, props:Object, from:Boolean):void
+		{
+			if (viewPage) this.animateComponent(alias, delay, props, from);
+		}
+		
 		public function as_delete(alias:String):void
 		{
 			if (viewPage) deleteComponent(alias);
@@ -157,6 +162,19 @@
 			{
 				if (components.hasOwnProperty(alias)) Properties.setProperty(components[alias], props);
 				else Properties.setProperty(Properties.getComponentByPath(viewPage, alias.split(".")), props);
+			}
+			catch (error:Error)
+			{
+				py_log(error.getStackTrace());
+			}
+		}
+		
+		private function animateComponent(alias:String, delay:Number, props:Object, from:Boolean):void
+		{
+			try
+			{
+				if (components.hasOwnProperty(alias)) Properties.animateProperty(components[alias], delay, props, from);
+				else Properties.animateProperty(Properties.getComponentByPath(viewPage, alias.split(".")), delay, props, from);
 			}
 			catch (error:Error)
 			{

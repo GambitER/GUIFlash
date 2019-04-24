@@ -1,10 +1,15 @@
 ﻿package net.gambiter.utils
 {	
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Linear;
+	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.filters.DropShadowFilter;
+	
+	import mx.utils.ObjectUtil;
 	
 	import net.gambiter.FlashUI;
 	import net.gambiter.core.UIComponentEx;
@@ -63,6 +68,28 @@
 				FlashUI.ui.py_log("Object with linkage \'" + obj.name + "\' doesn`t contain property " + "with name \'" + arg + "\'.");
 			}
 			if (obj is UIComponentEx && !(obj is ImageEx)) (obj as UIComponentEx).refresh();
+		}
+		public static function animateProperty(obj:DisplayObject, delay:Number, args:Object, from:Boolean):void
+		{
+			if (!obj || !args) return;
+			var arg:String = null;
+			var new_args:Object = {};
+			for (arg in args)
+			{
+				if (obj.hasOwnProperty(arg))
+				{
+					new_args[((arg == "x") || (arg == "y"))?("_" + arg):arg] = args[arg];
+					continue;
+				}
+				FlashUI.ui.py_log("Object with linkage \'" + obj.name + "\' doesn`t contain property " + "with name \'" + arg + "\'.");
+			}
+			if (ObjectUtil.getClassInfo(new_args).properties.length > 0)
+			{
+				new_args.ease = Linear.easeNone;
+				if (obj is UIComponentEx) new_args.onUpdate = (obj as UIComponentEx).refresh;
+				if (from) TweenLite.from(obj, delay, new_args);
+				else TweenLite.to(obj, delay, new_args);
+			}
 		}
 		
 		public static function getComponentByPath(container:DisplayObjectContainer, path:Array):DisplayObject
