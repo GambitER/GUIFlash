@@ -7,12 +7,12 @@ import Event
 import BattleReplay
 import json, codecs
 from gui import g_guiResetters
-from gui.app_loader import g_appLoader
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as SPACE_ID
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.personality import ServicesLocator
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ViewTypes, ScopeTemplates
+from skeletons.gui.app_loader import GuiGlobalSpaceID as SPACE_ID
 from utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR
 
 
@@ -154,12 +154,12 @@ class Views(object):
 class Hooks(object):
 
     def _start(self):
-        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
-        g_appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
+        ServicesLocator.appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
+        ServicesLocator.appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
 
     def _destroy(self):
-        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
-        g_appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
+        ServicesLocator.appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
+        ServicesLocator.appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
 
     def _populate(self):
         g_eventBus.addListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -231,7 +231,7 @@ class Events(object):
         pass
 
     def goToBattle(self):
-        g_appLoader.getApp().loadView(SFViewLoadParams(CONSTANTS.VIEW_ALIAS))
+        ServicesLocator.appLoader.getApp().loadView(SFViewLoadParams(CONSTANTS.VIEW_ALIAS))
 
     def leaveLobby(self):
         pass
