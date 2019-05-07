@@ -2,11 +2,8 @@
 {
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import flash.text.GridFitType;
 	import flash.text.AntiAliasType;
 	import flash.text.TextFieldAutoSize;
-	
-	import scaleform.gfx.TextFieldEx;
 	
 	import net.gambiter.FlashUI;
 	import net.gambiter.utils.Align;
@@ -48,7 +45,6 @@
 			textField.backgroundColor = 0x000000;
 			
 			textField.embedFonts = true;
-			textField.gridFitType = GridFitType.PIXEL;
 			textField.autoSize = TextFieldAutoSize.LEFT;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			

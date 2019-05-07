@@ -1,5 +1,6 @@
 ﻿package net.gambiter
 {
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	
 	import net.gambiter.utils.Components;
@@ -117,14 +118,9 @@
 			if (viewPage) createComponent(alias, type, props);
 		}
 		
-		public function as_update(alias:String, props:Object):void
+		public function as_update(alias:String, props:Object, params:Object):void
 		{
-			if (viewPage) updateComponent(alias, props);
-		}
-		
-		public function as_animate(alias:String, delay:Number, props:Object, from:Boolean):void
-		{
-			if (viewPage) this.animateComponent(alias, delay, props, from);
+			if (viewPage) updateComponent(alias, props, params);
 		}
 		
 		public function as_delete(alias:String):void
@@ -156,32 +152,24 @@
 			}
 		}
 		
-		private function updateComponent(alias:String, props:Object):void
+		private function updateComponent(alias:String, props:Object, params:Object = null):void
 		{
 			try
 			{
-				if (components.hasOwnProperty(alias)) Properties.setProperty(components[alias], props);
-				else Properties.setProperty(Properties.getComponentByPath(viewPage, alias.split(".")), props);
+				var obj:DisplayObject = null;
+				
+				if (components.hasOwnProperty(alias)) obj = components[alias];
+				else obj = Properties.getComponentByPath(viewPage, alias.split("."));
+				
+				if (params) Properties.setAnimateProperty(obj, props, params);
+				else Properties.setProperty(obj, props);
 			}
 			catch (error:Error)
 			{
 				py_log(error.getStackTrace());
 			}
 		}
-		
-		private function animateComponent(alias:String, delay:Number, props:Object, from:Boolean):void
-		{
-			try
-			{
-				if (components.hasOwnProperty(alias)) Properties.animateProperty(components[alias], delay, props, from);
-				else Properties.animateProperty(Properties.getComponentByPath(viewPage, alias.split(".")), delay, props, from);
-			}
-			catch (error:Error)
-			{
-				py_log(error.getStackTrace());
-			}
-		}
-		
+				
 		private function deleteComponent(alias:String):void
 		{
 			try

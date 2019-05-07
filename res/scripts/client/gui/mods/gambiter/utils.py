@@ -4,22 +4,21 @@
 IS_DEBUG = False
 
 
-
 def LOG(arg, *args):
     print str(arg), ' '.join([str(arg) for arg in args])
 
 
 def LOG_NOTE(*args):
-    LOG('[NOTE]', *args)
+    LOG('GUIFlash: [NOTE]', *args)
 
 
 def LOG_ERROR(*args):
-    LOG('[ERROR]', *args)
+    LOG('GUIFlash: [ERROR]', *args)
 
 
 def LOG_DEBUG(*args):
     if IS_DEBUG:
-        LOG('[DEBUG]', *args)
+        LOG('GUIFlash: [DEBUG]', *args)
 
 
 def LOG_TRACE(exc=None):
@@ -38,9 +37,9 @@ def LOG_DIR(object, include=None, exclude=None):
     for attr in dir(object):
         if (include is None or attr.find(include) >= 0) and (exclude is None or attr.find(exclude) == -1):
             try:
-                LOG('[DIR]', 'object.%s = %s' % (attr, getattr(object, attr)))
+                LOG('GUIFlash: [DIR]', 'object.%s = %s' % (attr, getattr(object, attr)))
             except:
-                LOG('[DIR]', 'object.%s = %s' % (attr, '<error>'))
+                LOG('GUIFlash: [DIR]', 'object.%s = %s' % (attr, '<error>'))
     print('=') * 25
 
 

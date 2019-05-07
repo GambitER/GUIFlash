@@ -7,12 +7,12 @@ import Event
 import BattleReplay
 import json, codecs
 from gui import g_guiResetters
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.personality import ServicesLocator
+from skeletons.gui.app_loader import GuiGlobalSpaceID as SPACE_ID
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ViewTypes, ScopeTemplates
-from skeletons.gui.app_loader import GuiGlobalSpaceID as SPACE_ID
 from utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR
 
 
@@ -57,16 +57,16 @@ class Cache(object):
         self.components = {}
 
     def create(self, alias, type, props):
+        LOG_DEBUG("Create cache: '%s' [%s] -> Properties: %s" % (alias, type, props))
         self.components[alias] = {'type': type, 'props': props}
-        LOG_DEBUG('GUIFlash :', 'Cache "%s" [%s] created. Parameters: %s' % (alias, type, props))
 
     def update(self, alias, props):
+        LOG_DEBUG("Change cache: '%s' -> Properties: %s" % (alias, props))
         self.components[alias].get('props').update(props)
-        LOG_DEBUG('GUIFlash :', 'Cache "%s" updated. Parameters: %s' % (alias, props))
 
     def delete(self, alias):
+        LOG_DEBUG("Destroy cache: '%s'" % alias)
         del self.components[alias]
-        LOG_DEBUG('GUIFlash :', 'Cache "%s" deleted.' % alias)
 
     def isComponent(self, alias):
         return alias in self.components
@@ -87,14 +87,14 @@ class Cache(object):
 
     # ..
     def readConfig(self, file):
-        LOG_DEBUG('GUIFlash :', 'Read config from file "%s".' % file)
+        LOG_DEBUG("Read config from file '%s'." % file)
         with open(file, "r") as file:
             data = json.load(file)
         return data
 
     # ..
     def saveConfig(self, file, data):
-        LOG_DEBUG('GUIFlash :', 'Save config in file "%s".' % file)
+        LOG_DEBUG("Save config in file '%s'." % file)
         with open(file, 'wb') as file:
             json.dump(data, codecs.getwriter('utf-8')(file), indent=4, sort_keys=True, ensure_ascii=False)
 
@@ -111,23 +111,18 @@ class Views(object):
 
     def create(self, alias, type, props):
         if self.ui is not None:
+            LOG_DEBUG("Create component: '%s' [%s] -> Properties: %s" % (alias, type, props))
             self.ui.as_createS(alias, type, props)
-            LOG_DEBUG('GUIFlash :', 'Component "%s" [%s] created. Parameters: %s' % (alias, type, props))
 
-    def update(self, alias, props):
+    def update(self, alias, props, params):
         if self.ui is not None:
-            self.ui.as_updateS(alias, props)
-            LOG_DEBUG('GUIFlash :', 'Component "%s" updated. Parameters: %s' % (alias, props))
-
-    def animate(self, alias, delay, props, isFrom=False):
-        if self.ui is not None:
-            self.ui.as_animateS(alias, delay, props, isFrom)
-            LOG_DEBUG('GUIFlash :', 'Component "%s" animated. Parameters: %s' % (alias, props))
+            LOG_DEBUG("Change component: '%s' -> Properties: %s | Parameters: %s" % (alias, props, params))
+            self.ui.as_updateS(alias, props, params)
 
     def delete(self, alias):
         if self.ui is not None:
+            LOG_DEBUG("Destroy component: '%s'" % alias)
             self.ui.as_deleteS(alias)
-            LOG_DEBUG('GUIFlash :', 'Component "%s" deleted.' % alias)
 
     def resize(self):
         if self.ui is not None:
@@ -276,13 +271,9 @@ class Flash_Meta(View):
         if self._isDAAPIInited():
             return self.flashObject.as_create(alias, type, props)
 
-    def as_updateS(self, alias, props):
+    def as_updateS(self, alias, props, params):
         if self._isDAAPIInited():
-            return self.flashObject.as_update(alias, props)
-
-    def as_animateS(self, alias, delay, props, isFrom=False):
-        if self._isDAAPIInited():
-            return self.flashObject.as_animate(alias, delay, props, isFrom)
+            return self.flashObject.as_update(alias, props, params)
 
     def as_deleteS(self, alias):
         if self._isDAAPIInited():
@@ -324,7 +315,7 @@ class Flash_UI(Flash_Meta):
         super(Flash_UI, self)._dispose()
 
     def py_log(self, *args):
-        LOG_NOTE('GUIFlash :', *args)
+        LOG_NOTE(*args)
 
     def py_update(self, alias, props):
         if g_guiCache.isComponent(alias):
@@ -349,30 +340,23 @@ class GUIFlash(object):
                 g_guiCache.create(alias, type, props)
                 g_guiViews.create(alias, type, props)
             else:
-                LOG_ERROR('GUIFlash :', 'Invalid type of component "%s"!' % alias)
+                LOG_ERROR("Invalid type of component '%s'!" % alias)
         else:
-            LOG_ERROR('GUIFlash :', 'Component "%s" already exists!' % alias)
+            LOG_ERROR("Component '%s' already exists!" % alias)
 
-    def updateComponent(self, alias, props):
+    def updateComponent(self, alias, props, params=None):
         if g_guiCache.isComponent(alias):
             g_guiCache.update(alias, props)
-            g_guiViews.update(alias, props)
+            g_guiViews.update(alias, props, params)
         else:
-            LOG_ERROR('GUIFlash :', 'Component "%s" not found!' % alias)
-
-    def animateComponent(self, alias, delay, props, isFrom=False):
-        if g_guiCache.isComponent(alias):
-            g_guiCache.update(alias, props)
-            g_guiViews.animate(alias, delay, props, isFrom)
-        else:
-            LOG_ERROR('GUIFlash :', 'Component "%s" not found!' % alias)
+            LOG_ERROR("Component '%s' not found!" % alias)
 
     def deleteComponent(self, alias):
         if g_guiCache.isComponent(alias):
             g_guiCache.delete(alias)
             g_guiViews.delete(alias)
         else:
-            LOG_ERROR('GUIFlash :', 'Component "%s" not found!' % alias)
+            LOG_ERROR("Component '%s' not found" % alias)
 
 
 g_guiCache = Cache()
