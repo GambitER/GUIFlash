@@ -27,6 +27,8 @@
 		public var showRadialMenu:Boolean;
 		public var showFullStats:Boolean;
 		public var showFullStatsQuestProgress:Boolean;
+		public var epicMapOverlayVisibility:Boolean;
+		public var epicRespawnOverlayVisibility:Boolean;
 		
 		public var screenSize:Object;
 		
@@ -57,6 +59,8 @@
 			showRadialMenu = false;
 			showFullStats = false;
 			showFullStatsQuestProgress = false;
+			epicMapOverlayVisibility = false;
+			epicRespawnOverlayVisibility = false;
 			
 			screenSize = {width: SCREEN_WIDTH, height: SCREEN_HEIGHT};
 		}
@@ -112,7 +116,19 @@
 			if (arg != showFullStatsQuestProgress) showFullStatsQuestProgress = arg;
 			for (var alias:String in components) components[alias].updateVisible();			 
 		}
-				
+
+		public function as_epicMapOverlayVisibility(arg:Boolean):void
+		{
+			if (arg != epicMapOverlayVisibility) epicMapOverlayVisibility = arg;
+			for (var alias:String in components) components[alias].updateVisible();			 
+		}
+
+		public function as_epicRespawnOverlayVisibility(arg:Boolean):void
+		{
+			if (arg != epicRespawnOverlayVisibility) epicRespawnOverlayVisibility = arg;
+			for (var alias:String in components) components[alias].updateVisible();			 
+		}
+
 		public function as_create(alias:String, type:String, props:Object):void
 		{
 			if (viewPage) createComponent(alias, type, props);
