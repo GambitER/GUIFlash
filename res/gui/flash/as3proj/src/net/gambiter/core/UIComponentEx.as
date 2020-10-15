@@ -93,7 +93,7 @@
 		
 		public function updateVisible():void
 		{
-			super.visible = _visible && (!FlashUI.ui.showRadialMenu || _radialMenu) && (!FlashUI.ui.showFullStats || _fullStats) && (!FlashUI.ui.showFullStatsQuestProgress || _fullStatsQuestProgress);
+			super.visible = _visible && (!FlashUI.ui.showRadialMenu || _radialMenu) && (!FlashUI.ui.showFullStats || _fullStats) && (!FlashUI.ui.showFullStatsQuestProgress || _fullStatsQuestProgress) && (!FlashUI.ui.epicMapOverlayVisibility || !FlashUI.ui.epicRespawnOverlayVisibility);
 		}
 		
 		private function updateIndex():void		

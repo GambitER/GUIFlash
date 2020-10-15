@@ -9,8 +9,10 @@ import GUI
 
 import BattleReplay
 import Event
+from frameworks.wulf import WindowLayer
 from gui import g_guiResetters
-from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ViewTypes, ScopeTemplates
+from gui.Scaleform.daapi.view.battle.battle_royale import BattleRoyalePage
+from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ScopeTemplates
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -159,6 +161,10 @@ class Views(object):
         if self.ui is not None:
             self.ui.as_epicRespawnOverlayVisibilityS(isShow)
 
+    def battleRoyaleSpawnVisibility(self, isShow):
+        if self.ui is not None:
+            self.ui.as_battleRoyaleRespawnVisibilityS(isShow)
+
 
 class Hooks(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -178,13 +184,24 @@ class Hooks(object):
         g_eventBus.addListener(events.GameEvent.FULL_STATS, self.__toggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.addListener(events.GameEvent.FULL_STATS_QUEST_PROGRESS, self.__toggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
         g_guiResetters.add(self.__onResizeStage)
+
         ctrl = self.sessionProvider.dynamic.maps
-        # TODO: check for bonusType?!
         if ctrl and hasattr(ctrl, 'onVisibilityChanged'):
             ctrl.onVisibilityChanged += self.__onMapVisibilityChanged
+
+        # NOTE: frontline respawn screen
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibilityChanged
+
+        # NOTE: steel hunter select spawn screen
+        spawnCtrl = self.sessionProvider.dynamic.spawn
+        if spawnCtrl is not None:
+            if hasattr(BattleRoyalePage, 'showSpawnPoints'):
+                global hooked_showSpawnPoints
+                hooked_showSpawnPoints = BattleRoyalePage.showSpawnPoints
+                BattleRoyalePage.showSpawnPoints = newBattleRoyalePageShowSpawnPoints
+                LOG_DEBUG('BattleRoyalePage:ShowSpawnPoints hooked!')
 
     def _dispose(self):
         g_eventBus.removeListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -195,12 +212,20 @@ class Hooks(object):
         g_guiResetters.discard(self.__onResizeStage)
 
         ctrl = self.sessionProvider.dynamic.maps
-        # TODO: check for bonusType?!
         if ctrl and hasattr(ctrl, 'onVisibilityChanged'):
             ctrl.onVisibilityChanged -= self.__onMapVisibilityChanged
+
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibilityChanged
+
+        # NOTE: steel hunter select spawn screen
+        spawnCtrl = self.sessionProvider.dynamic.spawn
+        global hooked_showSpawnPoints
+        if spawnCtrl is not None and hooked_showSpawnPoints is not None:
+            BattleRoyalePage.showSpawnPoints = hooked_showSpawnPoints
+            hooked_showSpawnPoints = None
+            LOG_DEBUG('BattleRoyalePage:ShowSpawnPoints hook removed!')
 
     def __onGUISpaceEntered(self, spaceID):
         if spaceID == SPACE_ID.LOGIN:
@@ -249,6 +274,9 @@ class Hooks(object):
     def __onRespawnVisibilityChanged(self, isRespawnScreenVisible):
         g_guiEvents.epicRespawnOverlayVisibility(isRespawnScreenVisible)
 
+    def onBattleRoyaleSpawnVisibilityChanged(self, isSpawnScreenVisible):
+        g_guiEvents.battleRoyaleSpawnVisibility(isSpawnScreenVisible)
+
 
 class Events(object):
 
@@ -291,11 +319,19 @@ class Events(object):
     def epicRespawnOverlayVisibility(self, isShow):
         g_guiViews.epicRespawnOverlayVisibility(isShow)
 
+    def battleRoyaleSpawnVisibility(self, isShow):
+        g_guiViews.battleRoyaleSpawnVisibility(isShow)
+
 
 class Settings(object):
 
     def _start(self):
-        g_entitiesFactories.addSettings(ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, ViewTypes.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
+
+        # before WoT 1.10.1
+        #g_entitiesFactories.addSettings(ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, ViewTypes.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
+
+        # since WoT 1.10.1
+        g_entitiesFactories.addSettings(ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, WindowLayer.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
 
     def _destroy(self):
         g_entitiesFactories.removeSettings(CONSTANTS.VIEW_ALIAS)
@@ -346,6 +382,9 @@ class Flash_Meta(View):
 
     def as_epicRespawnOverlayVisibilityS(self, isShow):
         return self.flashObject.as_epicRespawnOverlayVisibility(isShow) if self._isDAAPIInited() else None
+
+    def as_battleRoyaleRespawnVisibilityS(self, isShow):
+        return self.flashObject.as_battleRoyaleRespawnVisibility(isShow) if self._isDAAPIInited() else None
 
 
 class Flash_UI(Flash_Meta):
@@ -412,3 +451,16 @@ g_guiViews = Views()
 g_guiHooks = Hooks()
 g_guiEvents = Events()
 g_guiSettings = Settings()
+
+hooked_showSpawnPoints = BattleRoyalePage.showSpawnPoints
+
+
+def newBattleRoyalePageShowSpawnPoints(self):
+    try:
+        LOG_DEBUG('newBattleRoyalePageShowSpawnPoints called!')
+        g_guiHooks.onBattleRoyaleSpawnVisibilityChanged(True)
+    except StandardError:
+        pass
+    finally:
+        hooked_showSpawnPoints(self)
+

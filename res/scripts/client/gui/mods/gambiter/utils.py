@@ -1,6 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
 
-
 IS_DEBUG = False
 
 

@@ -4,4 +4,4 @@ from flash import GUIFlash
 
 g_guiFlash = GUIFlash()
 
-print 'GUIFlash v0.34 by GambitER initialised. (maintained by CHAMPi)'
+print 'GUIFlash v0.3.5b1 by GambitER initialised. (maintained by CHAMPi)'

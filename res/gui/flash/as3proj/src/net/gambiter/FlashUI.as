@@ -2,14 +2,13 @@
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
-	
 	import net.gambiter.utils.Components;
 	import net.gambiter.utils.Properties;
-	
-	import net.wg.infrastructure.managers.impl.ContainerManagerBase;
+	import net.wg.data.constants.generated.LAYER_NAMES;
 	import net.wg.gui.components.containers.MainViewContainer;
 	import net.wg.infrastructure.base.AbstractView;
-	import net.wg.data.constants.generated.APP_CONTAINERS_NAMES;
+	import net.wg.infrastructure.interfaces.IManagedContent;
+	import net.wg.infrastructure.interfaces.ISimpleManagedContainer;
 	
 	public class FlashUI extends AbstractView
 	{
@@ -29,10 +28,11 @@
 		public var showFullStatsQuestProgress:Boolean;
 		public var epicMapOverlayVisibility:Boolean;
 		public var epicRespawnOverlayVisibility:Boolean;
+		public var battleRoyaleRespawnVisibility:Boolean;
 		
 		public var screenSize:Object;
 		
-		private var viewContainer:MainViewContainer;
+		//private var viewContainer:MainViewContainer;
 		private var viewPage:DisplayObjectContainer;
 		
 		private var components:Object;
@@ -61,10 +61,28 @@
 			showFullStatsQuestProgress = false;
 			epicMapOverlayVisibility = false;
 			epicRespawnOverlayVisibility = false;
+			battleRoyaleRespawnVisibility = false
 			
 			screenSize = {width: SCREEN_WIDTH, height: SCREEN_HEIGHT};
 		}
 		
+		//override protected function onPopulate():void
+		//{
+			//super.onPopulate();
+			//
+			//try
+			//{
+				//parent.removeChild(this);
+				//var viewContainer:MainViewContainer = _getContainer(LAYER_NAMES.VIEWS) as MainViewContainer;
+				//viewContainer.setFocusedView(viewContainer.getTopmostView());
+				//viewPage = viewContainer.getChildByName(NAME_MAIN) as DisplayObjectContainer;
+			//}
+			//catch (error:Error)
+			//{
+				//py_log(error.getStackTrace());
+			//}
+		//}
+
 		override protected function onPopulate():void
 		{
 			super.onPopulate();
@@ -72,14 +90,35 @@
 			try
 			{
 				parent.removeChild(this);
-				viewContainer = (App.containerMgr as ContainerManagerBase).containersMap[APP_CONTAINERS_NAMES.VIEWS];
-				viewContainer.setFocusedView(viewContainer.getTopmostView());
-				viewPage = viewContainer.getChildByName(NAME_MAIN) as DisplayObjectContainer;
+				//viewContainer = (App.containerMgr as ContainerManagerBase).containersMap[APP_CONTAINERS_NAMES.VIEWS];
+				var viewContainer:MainViewContainer = _getContainer(LAYER_NAMES.VIEWS) as MainViewContainer;
+				if (viewContainer != null)
+				{
+					var topmostView:IManagedContent = viewContainer.getTopmostView();
+					if (topmostView != null)
+					{
+						viewContainer.setFocusedView(topmostView);
+					}
+					else{
+						py_log("Error: topmostView is NULL!");
+					}
+                    viewPage = viewContainer.getChildByName(NAME_MAIN) as DisplayObjectContainer;
+				}
+				else
+				{
+					py_log("Error: viewContainer is NULL!");
+				}
 			}
 			catch (error:Error)
 			{
 				py_log(error.getStackTrace());
 			}
+		}
+
+		// Wot 1.10.1
+		private function _getContainer(containerName:String) : ISimpleManagedContainer
+		{
+			return App.containerMgr.getContainer(LAYER_NAMES.LAYER_ORDER.indexOf(containerName))
 		}
 		
 		override protected function onDispose():void
@@ -127,6 +166,12 @@
 		{
 			if (arg != epicRespawnOverlayVisibility) epicRespawnOverlayVisibility = arg;
 			for (var alias:String in components) components[alias].updateVisible();			 
+		}
+
+		public function as_battleRoyaleRespawnVisibility(arg:Boolean):void
+		{
+			if (arg != battleRoyaleRespawnVisibility) battleRoyaleRespawnVisibility = arg;
+			for (var alias:String in components) components[alias].updateVisible();
 		}
 
 		public function as_create(alias:String, type:String, props:Object):void
