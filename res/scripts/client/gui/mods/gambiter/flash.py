@@ -203,6 +203,12 @@ class Hooks(object):
                 BattleRoyalePage.showSpawnPoints = newBattleRoyalePageShowSpawnPoints
                 LOG_DEBUG('BattleRoyalePage:ShowSpawnPoints hooked!')
 
+            if hasattr(BattleRoyalePage, 'closeSpawnPoints'):
+                global hooked_closeSpawnPoints
+                hooked_closeSpawnPoints = BattleRoyalePage.closeSpawnPoints
+                BattleRoyalePage.closeSpawnPoints = newBattleRoyalePageCloseSpawnPoints
+                LOG_DEBUG('BattleRoyalePage:ShowSpawnPoints hooked!')
+
     def _dispose(self):
         g_eventBus.removeListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
         g_eventBus.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -221,11 +227,16 @@ class Hooks(object):
 
         # NOTE: steel hunter select spawn screen
         spawnCtrl = self.sessionProvider.dynamic.spawn
-        global hooked_showSpawnPoints
+        global hooked_showSpawnPoints, hooked_closeSpawnPoints
         if spawnCtrl is not None and hooked_showSpawnPoints is not None:
             BattleRoyalePage.showSpawnPoints = hooked_showSpawnPoints
             hooked_showSpawnPoints = None
             LOG_DEBUG('BattleRoyalePage:ShowSpawnPoints hook removed!')
+
+        if spawnCtrl is not None and hooked_closeSpawnPoints is not None:
+            BattleRoyalePage.closeSpawnPoints = hooked_closeSpawnPoints
+            hooked_closeSpawnPoints = None
+            LOG_DEBUG('BattleRoyalePage:CloseSpawnPoints hook removed!')
 
     def __onGUISpaceEntered(self, spaceID):
         if spaceID == SPACE_ID.LOGIN:
@@ -453,6 +464,7 @@ g_guiEvents = Events()
 g_guiSettings = Settings()
 
 hooked_showSpawnPoints = BattleRoyalePage.showSpawnPoints
+hooked_closeSpawnPoints = BattleRoyalePage.closeSpawnPoints
 
 
 def newBattleRoyalePageShowSpawnPoints(self):
@@ -464,3 +476,12 @@ def newBattleRoyalePageShowSpawnPoints(self):
     finally:
         hooked_showSpawnPoints(self)
 
+
+def newBattleRoyalePageCloseSpawnPoints(self):
+    try:
+        LOG_DEBUG('newBattleRoyalePageCloseSpawnPoints called!')
+        g_guiHooks.onBattleRoyaleSpawnVisibilityChanged(False)
+    except StandardError:
+        pass
+    finally:
+        hooked_closeSpawnPoints(self)
