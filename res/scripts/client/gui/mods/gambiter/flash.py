@@ -186,12 +186,12 @@ class Hooks(object):
         g_guiResetters.add(self.__onResizeStage)
 
         ctrl = self.sessionProvider.dynamic.maps
-        if ctrl and hasattr(ctrl, 'onVisibilityChanged'):
+        if ctrl is not None and hasattr(ctrl, 'onVisibilityChanged'):
             ctrl.onVisibilityChanged += self.__onMapVisibilityChanged
 
         # NOTE: frontline respawn screen
         ctrl = self.sessionProvider.dynamic.respawn
-        if ctrl is not None:
+        if ctrl is not None and hasattr(ctrl, 'onRespawnVisibilityChanged'):
             ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibilityChanged
 
         # NOTE: steel hunter select spawn screen
@@ -199,15 +199,17 @@ class Hooks(object):
         if spawnCtrl is not None:
             if hasattr(BattleRoyalePage, 'showSpawnPoints'):
                 global hooked_showSpawnPoints
-                hooked_showSpawnPoints = BattleRoyalePage.showSpawnPoints
-                BattleRoyalePage.showSpawnPoints = newBattleRoyalePageShowSpawnPoints
-                LOG_DEBUG('BattleRoyalePage:ShowSpawnPoints hooked!')
+                if hooked_showSpawnPoints is None:
+                    hooked_showSpawnPoints = BattleRoyalePage.showSpawnPoints
+                    BattleRoyalePage.showSpawnPoints = newBattleRoyalePageShowSpawnPoints
+                    LOG_DEBUG('BattleRoyalePage:showSpawnPoints hooked!')
 
             if hasattr(BattleRoyalePage, 'closeSpawnPoints'):
                 global hooked_closeSpawnPoints
-                hooked_closeSpawnPoints = BattleRoyalePage.closeSpawnPoints
-                BattleRoyalePage.closeSpawnPoints = newBattleRoyalePageCloseSpawnPoints
-                LOG_DEBUG('BattleRoyalePage:ShowSpawnPoints hooked!')
+                if hooked_closeSpawnPoints is None:
+                    hooked_closeSpawnPoints = BattleRoyalePage.closeSpawnPoints
+                    BattleRoyalePage.closeSpawnPoints = newBattleRoyalePageCloseSpawnPoints
+                    LOG_DEBUG('BattleRoyalePage:closeSpawnPoints hooked!')
 
     def _dispose(self):
         g_eventBus.removeListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -225,18 +227,19 @@ class Hooks(object):
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibilityChanged
 
+        # NOTE: move this later!
         # NOTE: steel hunter select spawn screen
-        spawnCtrl = self.sessionProvider.dynamic.spawn
-        global hooked_showSpawnPoints, hooked_closeSpawnPoints
-        if spawnCtrl is not None and hooked_showSpawnPoints is not None:
-            BattleRoyalePage.showSpawnPoints = hooked_showSpawnPoints
-            hooked_showSpawnPoints = None
-            LOG_DEBUG('BattleRoyalePage:ShowSpawnPoints hook removed!')
-
-        if spawnCtrl is not None and hooked_closeSpawnPoints is not None:
-            BattleRoyalePage.closeSpawnPoints = hooked_closeSpawnPoints
-            hooked_closeSpawnPoints = None
-            LOG_DEBUG('BattleRoyalePage:CloseSpawnPoints hook removed!')
+        # spawnCtrl = self.sessionProvider.dynamic.spawn
+        # global hooked_showSpawnPoints, hooked_closeSpawnPoints
+        # if spawnCtrl is not None and hooked_showSpawnPoints is not None:
+        #     BattleRoyalePage.showSpawnPoints = hooked_showSpawnPoints
+        #     hooked_showSpawnPoints = None
+        #     print 'BattleRoyalePage:ShowSpawnPoints hook removed!'
+        #
+        # if spawnCtrl is not None and hooked_closeSpawnPoints is not None:
+        #     BattleRoyalePage.closeSpawnPoints = hooked_closeSpawnPoints
+        #     hooked_closeSpawnPoints = None
+        #     print 'BattleRoyalePage:CloseSpawnPoints hook removed!'
 
     def __onGUISpaceEntered(self, spaceID):
         if spaceID == SPACE_ID.LOGIN:
@@ -337,9 +340,6 @@ class Events(object):
 class Settings(object):
 
     def _start(self):
-
-        # before WoT 1.10.1
-        #g_entitiesFactories.addSettings(ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, ViewTypes.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
 
         # since WoT 1.10.1
         g_entitiesFactories.addSettings(ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, WindowLayer.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
@@ -463,8 +463,8 @@ g_guiHooks = Hooks()
 g_guiEvents = Events()
 g_guiSettings = Settings()
 
-hooked_showSpawnPoints = BattleRoyalePage.showSpawnPoints
-hooked_closeSpawnPoints = BattleRoyalePage.closeSpawnPoints
+hooked_showSpawnPoints = None
+hooked_closeSpawnPoints = None
 
 
 def newBattleRoyalePageShowSpawnPoints(self):
