@@ -161,9 +161,9 @@ class Views(object):
         if self.ui is not None:
             self.ui.as_epicRespawnOverlayVisibilityS(isShow)
 
-    def battleRoyaleSpawnVisibility(self, isShow):
+    def battleRoyaleSpawnVisibility(self, isVisible):
         if self.ui is not None:
-            self.ui.as_battleRoyaleRespawnVisibilityS(isShow)
+            self.ui.as_battleRoyaleRespawnVisibilityS(isVisible)
 
 
 class Hooks(object):
@@ -211,6 +211,13 @@ class Hooks(object):
                     BattleRoyalePage.closeSpawnPoints = newBattleRoyalePageCloseSpawnPoints
                     LOG_DEBUG('BattleRoyalePage:closeSpawnPoints hooked!')
 
+        # TEST: check if this works more accurate
+        # ctrl = self.sessionProvider.dynamic.maps
+        # if ctrl is not None:
+        #     ctrl.onOverlayTriggered += self.onBattleRoyaleSpawnVisibilityChanged
+        #     self.onBattleRoyaleSpawnVisibilityChanged(ctrl.overlayActive)
+        # TEST: !check if this works more accurate
+
     def _dispose(self):
         g_eventBus.removeListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
         g_eventBus.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -226,6 +233,12 @@ class Hooks(object):
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibilityChanged
+
+        # TEST: check if this works more accurate
+        # ctrl = self.sessionProvider.dynamic.maps
+        # if ctrl:
+        #     ctrl.onOverlayTriggered -= self.onBattleRoyaleSpawnVisibilityChanged
+        # TEST: !check if this works more accurate
 
         # NOTE: move this later!
         # NOTE: steel hunter select spawn screen
@@ -285,11 +298,11 @@ class Hooks(object):
     def __onMapVisibilityChanged(self, isVisible):
         g_guiEvents.epicMapOverlayVisibility(isVisible)
 
-    def __onRespawnVisibilityChanged(self, isRespawnScreenVisible):
-        g_guiEvents.epicRespawnOverlayVisibility(isRespawnScreenVisible)
+    def __onRespawnVisibilityChanged(self, isVisible):
+        g_guiEvents.epicRespawnOverlayVisibility(isVisible)
 
-    def onBattleRoyaleSpawnVisibilityChanged(self, isSpawnScreenVisible):
-        g_guiEvents.battleRoyaleSpawnVisibility(isSpawnScreenVisible)
+    def onBattleRoyaleSpawnVisibilityChanged(self, isVisible):
+        g_guiEvents.battleRoyaleSpawnVisibility(isVisible)
 
 
 class Events(object):
@@ -357,45 +370,37 @@ class Flash_Meta(View):
         self._printOverrideError('py_update')
 
     def as_createS(self, alias, type, props):
-        if self._isDAAPIInited():
-            return self.flashObject.as_create(alias, type, props)
+        return self.flashObject.as_create(alias, type, props) if self._isDAAPIInited() else None
 
     def as_updateS(self, alias, props, params):
-        if self._isDAAPIInited():
-            return self.flashObject.as_update(alias, props, params)
+        return self.flashObject.as_update(alias, props, params) if self._isDAAPIInited() else None
 
     def as_deleteS(self, alias):
-        if self._isDAAPIInited():
-            return self.flashObject.as_delete(alias)
+        return self.flashObject.as_delete(alias) if self._isDAAPIInited() else None
 
     def as_resizeS(self, width, height):
-        if self._isDAAPIInited():
-            return self.flashObject.as_resize(width, height)
+        return self.flashObject.as_resize(width, height) if self._isDAAPIInited() else None
 
-    def as_cursorS(self, isShow):
-        if self._isDAAPIInited():
-            return self.flashObject.as_cursor(isShow)
+    def as_cursorS(self, isVisible):
+        return self.flashObject.as_cursor(isVisible) if self._isDAAPIInited() else None
 
-    def as_radialMenuS(self, isShow):
-        if self._isDAAPIInited():
-            return self.flashObject.as_radialMenu(isShow)
+    def as_radialMenuS(self, isVisible):
+        return self.flashObject.as_radialMenu(isVisible) if self._isDAAPIInited() else None
 
-    def as_fullStatsS(self, isShow):
-        if self._isDAAPIInited():
-            return self.flashObject.as_fullStats(isShow)
+    def as_fullStatsS(self, isVisible):
+        return self.flashObject.as_fullStats(isVisible) if self._isDAAPIInited() else None
 
-    def as_fullStatsQuestProgressS(self, isShow):
-        if self._isDAAPIInited():
-            return self.flashObject.as_fullStatsQuestProgress(isShow)
+    def as_fullStatsQuestProgressS(self, isVisible):
+        return self.flashObject.as_fullStatsQuestProgress(isVisible) if self._isDAAPIInited() else None
 
-    def as_epicMapOverlayVisibilityS(self, isShow):
-        return self.flashObject.as_epicMapOverlayVisibility(isShow) if self._isDAAPIInited() else None
+    def as_epicMapOverlayVisibilityS(self, isVisible):
+        return self.flashObject.as_epicMapOverlayVisibility(isVisible) if self._isDAAPIInited() else None
 
-    def as_epicRespawnOverlayVisibilityS(self, isShow):
-        return self.flashObject.as_epicRespawnOverlayVisibility(isShow) if self._isDAAPIInited() else None
+    def as_epicRespawnOverlayVisibilityS(self, isVisible):
+        return self.flashObject.as_epicRespawnOverlayVisibility(isVisible) if self._isDAAPIInited() else None
 
-    def as_battleRoyaleRespawnVisibilityS(self, isShow):
-        return self.flashObject.as_battleRoyaleRespawnVisibility(isShow) if self._isDAAPIInited() else None
+    def as_battleRoyaleRespawnVisibilityS(self, isVisible):
+        return self.flashObject.as_battleRoyaleRespawnVisibility(isVisible) if self._isDAAPIInited() else None
 
 
 class Flash_UI(Flash_Meta):
@@ -431,14 +436,14 @@ class GUIFlash(object):
         g_guiHooks._destroy()
         g_guiSettings._destroy()
 
-    def createComponent(self, alias, type, props=None):
+    def createComponent(self, alias, compType, props=None):
         if not g_guiCache.isComponent(alias):
-            type = g_guiCache.getCustomizedType(type)
-            if g_guiCache.isTypeValid(type):
-                g_guiCache.create(alias, type, props)
-                g_guiViews.create(alias, type, props)
+            compType = g_guiCache.getCustomizedType(compType)
+            if g_guiCache.isTypeValid(compType):
+                g_guiCache.create(alias, compType, props)
+                g_guiViews.create(alias, compType, props)
             else:
-                LOG_ERROR("Invalid type of component '%s'!" % alias)
+                LOG_ERROR("Invalid component type '%s'!" % alias)
         else:
             LOG_ERROR("Component '%s' already exists!" % alias)
 
@@ -463,7 +468,7 @@ g_guiHooks = Hooks()
 g_guiEvents = Events()
 g_guiSettings = Settings()
 
-hooked_showSpawnPoints = None
+hooked_showSpawnPoints = None  # Type: Callable
 hooked_closeSpawnPoints = None
 
 

@@ -34,6 +34,8 @@
 		private var _radialMenu:Boolean;
 		private var _fullStats:Boolean;		
 		private var _fullStatsQuestProgress:Boolean;
+		private var _epicMapOverlayVisible:Boolean;
+		private var	_epicRespawnOverlayVisible:Boolean;
 		
 		public function UIComponentEx()
 		{
@@ -55,7 +57,9 @@
 			_visible = true;
 			_radialMenu = false;
 			_fullStats = false;
-			_fullStatsQuestProgress = false;			
+			_fullStatsQuestProgress = false;
+			_epicMapOverlayVisible = false;
+			_epicRespawnOverlayVisible = false;
 			
 			focusable = false;
 		}
@@ -93,7 +97,12 @@
 		
 		public function updateVisible():void
 		{
-			super.visible = _visible && (!FlashUI.ui.showRadialMenu || _radialMenu) && (!FlashUI.ui.showFullStats || _fullStats) && (!FlashUI.ui.showFullStatsQuestProgress || _fullStatsQuestProgress) && (!FlashUI.ui.epicMapOverlayVisibility || !FlashUI.ui.epicRespawnOverlayVisibility);
+			super.visible = _visible &&
+				(!FlashUI.ui.showRadialMenu || _radialMenu) &&
+				(!FlashUI.ui.showFullStats || _fullStats) &&
+				(!FlashUI.ui.showFullStatsQuestProgress || _fullStatsQuestProgress) &&
+				(!FlashUI.ui.epicMapOverlayVisibility || _epicMapOverlayVisible) &&
+				(!FlashUI.ui.epicRespawnOverlayVisibility || _epicRespawnOverlayVisible);
 		}
 		
 		private function updateIndex():void		

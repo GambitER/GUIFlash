@@ -5,6 +5,7 @@
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.filters.DropShadowFilter;
+	import flash.filters.GlowFilter;
 	
 	import com.greensock.TweenLite;
 	
@@ -44,13 +45,31 @@
 		{
 			if (!obj) return;
 			
-			var shadow:DropShadowFilter = new DropShadowFilter();
-
 			if (props)
 			{
-				for (var prop:String in props)
-					if (shadow.hasOwnProperty(prop)) shadow[prop] = props[prop];
+				var shadow:DropShadowFilter = new DropShadowFilter();
+				for (var prop:String in props) {
+					if (shadow.hasOwnProperty(prop)) {
+						shadow[prop] = props[prop];
+					}
+				}
 				obj.filters = [shadow];
+			}
+			else obj.filters = null;
+		}
+
+		public static function setGlowFilter(obj:DisplayObject, props:Object = null):void
+		{
+			if (!obj) return;
+			if (props)
+			{
+				var filter:GlowFilter = new GlowFilter();
+				for (var prop:String in props) {
+					if (filter.hasOwnProperty(prop)) {
+						filter[prop] = props[prop];
+					}
+				}
+				obj.filters = [filter];
 			}
 			else obj.filters = null;
 		}
@@ -58,10 +77,21 @@
 		public static function setProperty(obj:DisplayObject, props:Object):void
 		{
 			if (!obj || !props) return;
-
+			
 			for (var prop:String in props)
-			{				
-				if (obj.hasOwnProperty(prop)) { obj[prop] = props[prop]; continue; }
+			{
+				// TEST: glowfilter as property
+				//if (prop == 'glowfilter') {
+					//FlashUI.ui.py_log("property glowgilter found!");
+					//Properties.setGlowFilter(obj, props);
+					////props.pop(prop);
+					//continue;
+				//}
+//
+				if (obj.hasOwnProperty(prop)) {
+					obj[prop] = props[prop];
+					continue;
+				}
 				FlashUI.ui.py_log("Object with linkage \'" + obj.name + "\' doesn`t contain property " + "with name \'" + prop + "\'.");
 			}
 

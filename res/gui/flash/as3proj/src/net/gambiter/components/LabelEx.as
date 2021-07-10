@@ -12,7 +12,8 @@
 	
 	public class LabelEx extends UIComponentEx
 	{
-		public static const NAME_FONT:String = "$UniversCondC";
+		//public static const NAME_FONT:String = "$UniversCondC";
+		public static const NAME_FONT:String = "$Fieldfont";
 		
 		private var textField:TextField;
 		
@@ -66,20 +67,26 @@
 			}
 			super.onDispose();
 		}
-		
+
 		override public function refresh():void
 		{
 			super.refresh();
 		}
-		
+
 		private function updateText():void
 		{
-			if (text == null || textField == null) return;
-			if (isHtml) textField.htmlText = text;
-			else textField.text = text;			
+			if (text == null || textField == null) {
+				return;
+			}
+			if (isHtml) {
+				textField.htmlText = text;
+			}
+			else {
+				textField.text = text;			
+			}
 			initialize();
 		}
-		
+
 		override protected function updateBorder():void
 		{
 			borderEx.update(textField.x, textField.y, textField.width, textField.height);
@@ -198,5 +205,11 @@
 		{
 			Properties.setShadow(textField, args);
 		}
+
+		public function set glowfilter(args:Object):void
+		{
+			Properties.setGlowFilter(textField, args);
+		}
+		
 	}
 }

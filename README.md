@@ -2,7 +2,7 @@
 
 ## .. GUIFlash ..
 
-Copyright: (c) 2017-2019 GambitER, 2020 CH4MPi
+Copyright: (c) 2017-2019 GambitER, since 2020 CH4MPi
 
 This project is maintained by CH4MPi
 
