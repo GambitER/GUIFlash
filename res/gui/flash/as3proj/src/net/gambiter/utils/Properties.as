@@ -95,7 +95,9 @@
 				FlashUI.ui.py_log("Object with linkage \'" + obj.name + "\' doesn`t contain property " + "with name \'" + prop + "\'.");
 			}
 
-			if (obj is UIComponentEx && !(obj is ImageEx)) (obj as UIComponentEx).refresh();
+			if (obj is UIComponentEx && !(obj is ImageEx)) {
+				(obj as UIComponentEx).refresh();
+			}
 		}
 
 		public static function setAnimateProperty(obj:DisplayObject, props:Object, params:Object):void

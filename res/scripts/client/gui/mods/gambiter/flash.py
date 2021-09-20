@@ -5,6 +5,7 @@ __all__ = ['COMPONENT_TYPE', 'COMPONENT_ALIGN', 'COMPONENT_EVENT']
 import codecs
 import json
 
+# noinspection PyUnresolvedReferences
 import BigWorld
 import GUI
 
@@ -60,6 +61,7 @@ class COMPONENT_EVENT(object):
     UNLOADED = Event.Event()
 
 
+# noinspection PyMethodMayBeStatic
 class Cache(object):
 
     def __init__(self):
@@ -176,6 +178,7 @@ class Views(object):
             self.ui.as_battleRoyaleRespawnVisibilityS(isVisible)
 
 
+# noinspection PyMethodMayBeStatic
 class Hooks(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
@@ -313,6 +316,7 @@ class Hooks(object):
         g_guiEvents.battleRoyaleSpawnVisibility(isVisible)
 
 
+# noinspection PyMethodMayBeStatic
 class Events(object):
 
     def goToLogin(self):
@@ -358,6 +362,7 @@ class Events(object):
         g_guiViews.battleRoyaleSpawnVisibility(isShow)
 
 
+# noinspection PyMethodMayBeStatic
 class Settings(object):
 
     def _start(self):
@@ -435,6 +440,7 @@ class Flash_UI(Flash_Meta):
             COMPONENT_EVENT.UPDATED(alias, props.toDict())
 
 
+# noinspection PyMethodMayBeStatic
 class GUIFlash(object):
 
     def __init__(self):
@@ -458,6 +464,7 @@ class GUIFlash(object):
             LOG_ERROR("Component '%s' already exists!" % alias)
 
     def updateComponent(self, alias, props, params=None):
+        # TODO: image components are currently not updated by updateComponent calls.
         if g_guiCache.isComponent(alias):
             g_guiCache.update(alias, props)
             if g_guiCache.isActiveComponent(alias):
@@ -484,6 +491,7 @@ hooked_showSpawnPoints = None  # Type: Callable
 hooked_closeSpawnPoints = None
 
 
+# noinspection PyCallingNonCallable
 def newBattleRoyalePageShowSpawnPoints(self):
     try:
         LOG_DEBUG('newBattleRoyalePageShowSpawnPoints called!')
@@ -494,6 +502,7 @@ def newBattleRoyalePageShowSpawnPoints(self):
         hooked_showSpawnPoints(self)
 
 
+# noinspection PyCallingNonCallable
 def newBattleRoyalePageCloseSpawnPoints(self):
     try:
         LOG_DEBUG('newBattleRoyalePageCloseSpawnPoints called!')
