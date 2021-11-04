@@ -252,8 +252,7 @@ if CREATE_DISTRIBUTE:
         copytree('resources/out', 'temp/distribute')
     zipFolder('temp/distribute', 'build/{name}_{version}_{wotversion}.zip'.format(name=CONFIG['info']['id'],
                                                                      version=CONFIG['info']['version'],
-                                                                                  wotversion=GAME_VERSION))
-
+                                                                                  wotversion=GAME_VERSION), compression=zipfile.ZIP_DEFLATED)
 # list for cleaning
 cleanup_list = set([])
 

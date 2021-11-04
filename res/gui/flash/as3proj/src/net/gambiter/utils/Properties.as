@@ -7,7 +7,7 @@
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
 	
-	//import com.greensock.TweenLite;
+	import com.greensock.TweenLite;
 	
 	import net.gambiter.FlashUI;
 	import net.gambiter.core.UIComponentEx;
@@ -108,18 +108,6 @@
 
 			var from:Boolean = params.hasOwnProperty('from') && params.from;
 			var start:Boolean = params.hasOwnProperty('start') && params.start;
-			var delay:Number = ! !params.hasOwnProperty('delay') ? Number(params.delay) : Number(0);
-			setProperty(obj, props);
-		}
-
-/*		public static function setAnimatePropertyOld(obj:DisplayObject, props:Object, params:Object):void
-		{
-			if (!obj || !props) return;
-
-			var tweens:Object = new Object();
-
-			var from:Boolean = params.hasOwnProperty('from') && params.from;
-			var start:Boolean = params.hasOwnProperty('start') && params.start;
 			var delay:Number = params.hasOwnProperty('delay') ? params.delay : 0;
 			var duration:Number = params.hasOwnProperty('duration') ? params.duration : 0;
 
@@ -137,12 +125,12 @@
 			if (obj is UIComponentEx) tweens.onUpdate = (obj as UIComponentEx).refresh;
 			
 			if (start) { tweens.onStart = setProperty; tweens.onStartParams = [obj, props]; }
-			else { tweens.onComplete = setProperty; tweens.onCompleteParams = [obj, props]; }				
+			else { tweens.onComplete = setProperty; tweens.onCompleteParams = [obj, props]; }
 
 			if (from) TweenLite.from(obj, duration, tweens);
-			else TweenLite.to(obj, duration, tweens);				
+			else TweenLite.to(obj, duration, tweens);
 		}
-*/
+
 		private static function isEmptyObject(obj:Object):Boolean
 		{
 			var isEmpty:Boolean = true;
