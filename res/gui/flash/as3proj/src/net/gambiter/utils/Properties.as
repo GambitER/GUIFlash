@@ -7,7 +7,7 @@
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
 	
-	import com.greensock.TweenLite;
+	//import com.greensock.TweenLite;
 	
 	import net.gambiter.FlashUI;
 	import net.gambiter.core.UIComponentEx;
@@ -95,12 +95,24 @@
 				FlashUI.ui.py_log("Object with linkage \'" + obj.name + "\' doesn`t contain property " + "with name \'" + prop + "\'.");
 			}
 
-			if (obj is UIComponentEx && !(obj is ImageEx)) {
+			if (obj is UIComponentEx /* && !(obj is ImageEx)*/ ) {
 				(obj as UIComponentEx).refresh();
 			}
 		}
 
 		public static function setAnimateProperty(obj:DisplayObject, props:Object, params:Object):void
+		{
+			if (!obj || !props) return;
+
+			var tweens:Object = new Object();
+
+			var from:Boolean = params.hasOwnProperty('from') && params.from;
+			var start:Boolean = params.hasOwnProperty('start') && params.start;
+			var delay:Number = ! !params.hasOwnProperty('delay') ? Number(params.delay) : Number(0);
+			setProperty(obj, props);
+		}
+
+/*		public static function setAnimatePropertyOld(obj:DisplayObject, props:Object, params:Object):void
 		{
 			if (!obj || !props) return;
 
@@ -130,7 +142,7 @@
 			if (from) TweenLite.from(obj, duration, tweens);
 			else TweenLite.to(obj, duration, tweens);				
 		}
-
+*/
 		private static function isEmptyObject(obj:Object):Boolean
 		{
 			var isEmpty:Boolean = true;

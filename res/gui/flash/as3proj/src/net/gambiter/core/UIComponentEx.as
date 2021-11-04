@@ -136,7 +136,10 @@
 			var last_y:Number = _y;			
 			_x = Math.round(super.x - (parent.width - width) * Align.getFactor(_alignX));
 			_y = Math.round(super.y - (parent.height - height) * Align.getFactor(_alignY));
-			if ((_x != last_x) || (_y != last_y)) py_updateProps({"x": _x, "y": _y});
+			if ((_x != last_x) || (_y != last_y))
+			{
+				py_updateProps({"x": _x, "y": _y});
+			}
 		}
 		
 		private function py_updateProps(props:Object):void

@@ -265,7 +265,7 @@ cleanup_list.add('EvalScript error.tmp')
 cleanup_list.add('as3/DataStore')
 
 # python bytecode
-for dirName, _, files in os.walk('python'):
+for dirName, _, files in os.walk('res'):
     for fileName in files:
         if fileName.endswith('.pyc'):
             cleanup_list.add(os.path.join(dirName, fileName))

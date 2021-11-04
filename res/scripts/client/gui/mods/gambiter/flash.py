@@ -85,14 +85,10 @@ class Cache(object):
     def isActiveComponent(self, alias):
         if alias not in self.components:
             return False
-        if hasattr(BigWorld.player(), 'arena'):
-            return self.components[alias]['battle']
-        return self.components[alias]['lobby']
+        return self.components[alias]['battle'] if hasattr(BigWorld.player(), 'arena') else self.components[alias]['lobby']
 
     def getComponent(self, alias=None):
-        if alias is None:
-            return self.components
-        return self.components.get(alias)
+        return self.components if alias is None else self.components.get(alias)
 
     def getKeys(self):
         return sorted(filter(self.isActiveComponent, self.components.keys()))
@@ -103,14 +99,12 @@ class Cache(object):
     def isTypeValid(self, compType):
         return compType in ALL_COMPONENT_TYPES
 
-    # ..
     def readConfig(self, path):
         LOG_DEBUG("Read config from file '%s'." % path)
         with open(path, "r") as f:
             data = json.load(f)
         return data
 
-    # ..
     def saveConfig(self, path, data):
         LOG_DEBUG("Save config in file '%s'." % path)
         with codecs.open(path, 'w', 'utf-8') as f:
@@ -332,10 +326,14 @@ class Events(object):
         ServicesLocator.appLoader.getApp().loadView(SFViewLoadParams(CONSTANTS.VIEW_ALIAS))
 
     def leaveLobby(self):
-        pass
+        if g_guiViews.ui is not None:
+            g_guiViews.ui.destroy()
+        return
 
     def leaveBattle(self):
-        pass
+        if g_guiViews.ui is not None:
+            g_guiViews.ui.destroy()
+        return
 
     def resizeStage(self):
         g_guiViews.resize()
@@ -368,8 +366,8 @@ class Settings(object):
     def _start(self):
         # since WoT 1.10.1
         # noinspection PyArgumentList
-        g_entitiesFactories.addSettings(ViewSettings(
-            CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, WindowLayer.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
+        g_entitiesFactories.addSettings(ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, WindowLayer.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
+        return
 
     def _destroy(self):
         g_entitiesFactories.removeSettings(CONSTANTS.VIEW_ALIAS)
@@ -430,6 +428,7 @@ class Flash_UI(Flash_Meta):
         g_guiViews.ui = None
         g_guiHooks._dispose()
         super(Flash_UI, self)._dispose()
+        return
 
     def py_log(self, *args):
         LOG_NOTE(*args)
@@ -464,7 +463,6 @@ class GUIFlash(object):
             LOG_ERROR("Component '%s' already exists!" % alias)
 
     def updateComponent(self, alias, props, params=None):
-        # TODO: image components are currently not updated by updateComponent calls.
         if g_guiCache.isComponent(alias):
             g_guiCache.update(alias, props)
             if g_guiCache.isActiveComponent(alias):

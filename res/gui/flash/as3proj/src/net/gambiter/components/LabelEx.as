@@ -12,7 +12,6 @@
 	
 	public class LabelEx extends UIComponentEx
 	{
-		//public static const NAME_FONT:String = "$UniversCondC";
 		public static const NAME_FONT:String = "$Fieldfont";
 		
 		private var textField:TextField;
@@ -50,7 +49,16 @@
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			
 			textField.defaultTextFormat = new TextFormat(NAME_FONT, 12, 0xFFFFFF, false, false, false, "", "", "left", 0, 0, 0, 0);
-			Properties.setShadow(textField, {"distance": 4, "angle": 45, "color": 0x999999, "alpha": 1, "blurX": 4, "blurY": 4, "strength": 1, "quality": 1});
+			Properties.setShadow(textField, {
+				"distance": 4,
+				"angle": 45,
+				"color": 0x999999,
+				"alpha": 1,
+				"blurX": 4,
+				"blurY": 4,
+				"strength": 1,
+				"quality": 1
+			});
 		}
 		
 		override protected function configUI():void
