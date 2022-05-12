@@ -187,7 +187,7 @@ with open('build.json', 'r') as fh:
 GAME_FOLDER = CONFIG['game']['folder']
 GAME_VERSION = CONFIG['game']['version']
 
-# cheek ingame folder
+# cheek in-game folder
 WOT_PACKAGES_DIR = '{wot}/mods/{version}/'.format(wot=GAME_FOLDER, version=GAME_VERSION)
 if COPY_INTO_GAME:
     assert os.path.isdir(WOT_PACKAGES_DIR), 'WoT mods folder not found'
@@ -198,7 +198,7 @@ PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format(author=CONFIG['info']['
 
 # generate package meta file
 META = """<root>
-	<!-- Techical MOD ID -->
+	<!-- Technical MOD ID -->
 	<id>{author}.{id}</id>
 	<!-- Package version -->
 	<version>{version}</version>
@@ -250,9 +250,7 @@ if CREATE_DISTRIBUTE:
     shutil.copy2('build/{}'.format(PACKAGE_NAME), 'temp/distribute/mods/{}'.format(GAME_VERSION))
     if os.path.isdir('resources/out'):
         copytree('resources/out', 'temp/distribute')
-    zipFolder('temp/distribute', 'build/{name}_{version}_{wotversion}.zip'.format(name=CONFIG['info']['id'],
-                                                                     version=CONFIG['info']['version'],
-                                                                                  wotversion=GAME_VERSION), compression=zipfile.ZIP_DEFLATED)
+    zipFolder('temp/distribute', 'build/{name}_{version}_{wotversion}.zip'.format(name=CONFIG['info']['id'], version=CONFIG['info']['version'], wotversion=GAME_VERSION), compression=zipfile.ZIP_DEFLATED)
 # list for cleaning
 cleanup_list = set([])
 

@@ -13,7 +13,6 @@ import BattleReplay
 import Event
 from frameworks.wulf import WindowLayer
 from gui import g_guiResetters
-from gui.Scaleform.daapi.view.battle.battle_royale import BattleRoyalePage
 from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ScopeTemplates
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -202,28 +201,32 @@ class Hooks(object):
             ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibilityChanged
 
         # NOTE: steel hunter select spawn screen
-        spawnCtrl = self.sessionProvider.dynamic.spawn
-        if spawnCtrl is not None:
-            if hasattr(BattleRoyalePage, 'showSpawnPoints'):
-                global hooked_showSpawnPoints
-                if hooked_showSpawnPoints is None:
-                    hooked_showSpawnPoints = BattleRoyalePage.showSpawnPoints
-                    BattleRoyalePage.showSpawnPoints = newBattleRoyalePageShowSpawnPoints
-                    LOG_DEBUG('BattleRoyalePage:showSpawnPoints hooked!')
+        try:
+            from gui.Scaleform.daapi.view.battle.battle_royale import BattleRoyalePage
+            spawnCtrl = self.sessionProvider.dynamic.spawn
+            if spawnCtrl is not None:
+                if hasattr(BattleRoyalePage, 'showSpawnPoints'):
+                    global hooked_showSpawnPoints
+                    if hooked_showSpawnPoints is None:
+                        hooked_showSpawnPoints = BattleRoyalePage.showSpawnPoints
+                        BattleRoyalePage.showSpawnPoints = newBattleRoyalePageShowSpawnPoints
+                        LOG_DEBUG('BattleRoyalePage:showSpawnPoints hooked!')
 
-            if hasattr(BattleRoyalePage, 'closeSpawnPoints'):
-                global hooked_closeSpawnPoints
-                if hooked_closeSpawnPoints is None:
-                    hooked_closeSpawnPoints = BattleRoyalePage.closeSpawnPoints
-                    BattleRoyalePage.closeSpawnPoints = newBattleRoyalePageCloseSpawnPoints
-                    LOG_DEBUG('BattleRoyalePage:closeSpawnPoints hooked!')
+                if hasattr(BattleRoyalePage, 'closeSpawnPoints'):
+                    global hooked_closeSpawnPoints
+                    if hooked_closeSpawnPoints is None:
+                        hooked_closeSpawnPoints = BattleRoyalePage.closeSpawnPoints
+                        BattleRoyalePage.closeSpawnPoints = newBattleRoyalePageCloseSpawnPoints
+                        LOG_DEBUG('BattleRoyalePage:closeSpawnPoints hooked!')
 
-        # TEST: check if this works more accurate
-        # ctrl = self.sessionProvider.dynamic.maps
-        # if ctrl is not None:
-        #     ctrl.onOverlayTriggered += self.onBattleRoyaleSpawnVisibilityChanged
-        #     self.onBattleRoyaleSpawnVisibilityChanged(ctrl.overlayActive)
-        # TEST: !check if this works more accurate
+                # TEST: check if this works more accurate
+                # ctrl = self.sessionProvider.dynamic.maps
+                # if ctrl is not None:
+                #     ctrl.onOverlayTriggered += self.onBattleRoyaleSpawnVisibilityChanged
+                #     self.onBattleRoyaleSpawnVisibilityChanged(ctrl.overlayActive)
+                # TEST: !check if this works more accurate
+        except ImportError:
+            pass
 
     def _dispose(self):
         g_eventBus.removeListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
