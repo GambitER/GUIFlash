@@ -7,6 +7,7 @@ import json
 
 # noinspection PyUnresolvedReferences
 import BigWorld
+# noinspection PyUnresolvedReferences
 import GUI
 
 import BattleReplay
@@ -202,7 +203,7 @@ class Hooks(object):
 
         # NOTE: steel hunter select spawn screen
         try:
-            from gui.Scaleform.daapi.view.battle.battle_royale import BattleRoyalePage
+            from battle_royale.gui.Scaleform.daapi.view.battle import BattleRoyalePage
             spawnCtrl = self.sessionProvider.dynamic.spawn
             if spawnCtrl is not None:
                 if hasattr(BattleRoyalePage, 'showSpawnPoints'):
@@ -243,26 +244,6 @@ class Hooks(object):
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibilityChanged
-
-        # TEST: check if this works more accurate
-        # ctrl = self.sessionProvider.dynamic.maps
-        # if ctrl:
-        #     ctrl.onOverlayTriggered -= self.onBattleRoyaleSpawnVisibilityChanged
-        # TEST: !check if this works more accurate
-
-        # NOTE: move this later!
-        # NOTE: steel hunter select spawn screen
-        # spawnCtrl = self.sessionProvider.dynamic.spawn
-        # global hooked_showSpawnPoints, hooked_closeSpawnPoints
-        # if spawnCtrl is not None and hooked_showSpawnPoints is not None:
-        #     BattleRoyalePage.showSpawnPoints = hooked_showSpawnPoints
-        #     hooked_showSpawnPoints = None
-        #     print 'BattleRoyalePage:ShowSpawnPoints hook removed!'
-        #
-        # if spawnCtrl is not None and hooked_closeSpawnPoints is not None:
-        #     BattleRoyalePage.closeSpawnPoints = hooked_closeSpawnPoints
-        #     hooked_closeSpawnPoints = None
-        #     print 'BattleRoyalePage:CloseSpawnPoints hook removed!'
 
     def __onGUISpaceEntered(self, spaceID):
         if spaceID == SPACE_ID.LOGIN:
@@ -367,8 +348,6 @@ class Events(object):
 class Settings(object):
 
     def _start(self):
-        # since WoT 1.10.1
-        # noinspection PyArgumentList
         g_entitiesFactories.addSettings(ViewSettings(CONSTANTS.VIEW_ALIAS, Flash_UI, CONSTANTS.FILE_NAME, WindowLayer.WINDOW, None, ScopeTemplates.GLOBAL_SCOPE))
         return
 

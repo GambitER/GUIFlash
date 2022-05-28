@@ -35,7 +35,7 @@ def copytree(source, destination, ignore=None):
 
 
 def zipFolder(source, destination, mode='w', compression=zipfile.ZIP_STORED):
-    """ ZipFile by default dont create folders info in result zip """
+    """ ZipFile by default don't create folders info in result zip """
 
     def dirInfo(path):
         """return fixed ZipInfo for directory"""
@@ -70,7 +70,7 @@ def zipFolder(source, destination, mode='w', compression=zipfile.ZIP_STORED):
 
 
 def processRunning(path):
-    """Cheek is process runing, no"""
+    """Cheek is process running, no"""
     processName = os.path.basename(path).lower()
     try:
         import psutil
@@ -209,7 +209,7 @@ META = """<root>
 </root>""".format(author=CONFIG['info']['author'], id=CONFIG['info']['id'], name=CONFIG['info']['name'],
                   description=CONFIG['info']['description'], version=CONFIG['info']['version'])
 
-# prepere folders
+# prepare folders
 if os.path.isdir('temp'):
     shutil.rmtree('temp')
 os.makedirs('temp')
