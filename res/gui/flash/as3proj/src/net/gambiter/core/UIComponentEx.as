@@ -159,14 +159,12 @@
 		private function onMouseOver(event:MouseEvent):void
 		{
 			if (!FlashUI.ui.showCursor) return;
-			if (!_drag) return;
 			if (_tooltip && !_isDragging) App.toolTipMgr.show(_tooltip);
 			if (_border) borderEx.show();
 		}
 		
 		private function onMouseOut(event:MouseEvent):void
 		{
-			if (!_drag) return;
 			if (_tooltip) App.toolTipMgr.hide();
 			if (_border) borderEx.hide();
 		}
