@@ -68,14 +68,15 @@
 		override protected function configUI():void
 		{
 			super.configUI();
-			App.cursor.registerDragging(this);
 			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver, false, 0, true);
 			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
 		}
 		
 		override protected function onDispose():void
 		{
-			App.cursor.unRegisterDragging(this);
+			if (_drag) {
+				App.cursor.unRegisterDragging(this);
+			}
 			removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 			super.onDispose();
@@ -165,6 +166,7 @@
 		
 		private function onMouseOut(event:MouseEvent):void
 		{
+			if (!_drag) return;
 			if (_tooltip) App.toolTipMgr.hide();
 			if (_border) borderEx.hide();
 		}
@@ -208,7 +210,15 @@
 		
 		public function set drag(value:Boolean):void
 		{
-			if (value != _drag) _drag = value;
+			if (value != _drag) {
+				if (value) {
+					App.cursor.registerDragging(this);
+				}
+				else {
+					App.cursor.unRegisterDragging(this);
+				}
+				_drag = value;
+			}
 		}
 		
 		public function get limit():Boolean
