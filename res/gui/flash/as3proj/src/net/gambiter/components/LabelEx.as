@@ -45,7 +45,7 @@
 			textField.backgroundColor = 0x000000;
 			
 			textField.embedFonts = true;
-			textField.autoSize = TextFieldAutoSize.LEFT;
+			textField.autoSize = autoSize;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			
 			textField.defaultTextFormat = new TextFormat(NAME_FONT, 12, 0xFFFFFF, false, false, false, "", "", "left", 0, 0, 0, 0);
@@ -101,10 +101,10 @@
 		}
 		
 		override protected function updateSize():void
-		{			
-			if (autoSize)
+		{
+			if (autoSize != TextFieldAutoSize.NONE)
 			{
-				textField.autoSize = TextFieldAutoSize.LEFT;
+				textField.autoSize = autoSize;
 				// textField.width = _originalWidth;
 				// textField.height = _originalHeight;
 			}

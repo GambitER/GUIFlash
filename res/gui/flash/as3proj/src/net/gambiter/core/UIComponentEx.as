@@ -3,6 +3,7 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.display.InteractiveObject;
+	import flash.text.TextFieldAutoSize;
 	
 	import net.wg.data.constants.DragType;
 	import net.wg.infrastructure.interfaces.entity.IDraggable;
@@ -10,7 +11,7 @@
 	import net.gambiter.FlashUI;
 	import net.gambiter.utils.Align;
 	import net.gambiter.utils.Properties;
-	import net.gambiter.core.UIBorderEx;	
+	import net.gambiter.core.UIBorderEx;
 	import scaleform.clik.core.UIComponent;
 	
 	public class UIComponentEx extends UIComponent implements IDraggable
@@ -19,7 +20,7 @@
 		
 		public var _x:Number;
 		public var _y:Number;
-		private var _autoSize:Boolean;
+		private var _autoSize:String;
 		private var _alignX:String;
 		private var _alignY:String;		
 		private var _drag:Boolean;
@@ -49,7 +50,7 @@
 			_drag = false;
 			_limit = true;
 			_border = false;
-			_autoSize = true;
+			_autoSize = TextFieldAutoSize.LEFT;
 			_isDragging = false;
 			_alignX = Align.LEFT;
 			_alignY = Align.TOP;
@@ -157,6 +158,7 @@
 		private function onMouseOver(event:MouseEvent):void
 		{
 			if (!FlashUI.ui.showCursor) return;
+			if (!_drag) return;
 			if (_tooltip && !_isDragging) App.toolTipMgr.show(_tooltip);
 			if (_border) borderEx.show();
 		}
@@ -279,25 +281,25 @@
 			if ((Align.isValidY(value)) && (value != _alignY)) _alignY = value;
 		}
 		
-		public function get autoSize():Boolean
+		public function get autoSize():String
 		{
 			return _autoSize;
 		}
 		
-		public function set autoSize(value:Boolean):void
+		public function set autoSize(value:String):void
 		{
 			if (value != _autoSize) _autoSize = value;
 		}
 		
 		override public function set width(value:Number):void
 		{
-			_autoSize = false;
+			_autoSize = TextFieldAutoSize.NONE;
 			super.width = value;
 		}
 		
 		override public function set height(value:Number):void
 		{
-			_autoSize = false;
+			_autoSize = TextFieldAutoSize.NONE;
 			super.height = value;
 		}
 		
