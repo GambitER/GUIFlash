@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 
-__all__ = ['COMPONENT_TYPE', 'COMPONENT_ALIGN', 'COMPONENT_EVENT']
+__all__ = ['COMPONENT_TYPE', 'COMPONENT_ALIGN', 'TEXTFIELD_AUTOSIZE', 'COMPONENT_EVENT']
 
 import codecs
 import json
@@ -46,6 +46,13 @@ class COMPONENT_ALIGN(object):
     CENTER = 'center'
     TOP = "top"
     BOTTOM = 'bottom'
+
+
+class TEXTFIELD_AUTOSIZE:
+    LEFT = 'left'
+    CENTER = 'center'
+    RIGHT = 'right'
+    NONE = 'none'
 
 
 class COMPONENT_STATE(object):
