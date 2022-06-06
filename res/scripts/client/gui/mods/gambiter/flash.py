@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 
-__all__ = ['COMPONENT_TYPE', 'COMPONENT_ALIGN', 'TEXTFIELD_AUTOSIZE', 'COMPONENT_EVENT']
+__all__ = ['COMPONENT_TYPE', 'COMPONENT_ALIGN', 'COMPONENT_EVENT', 'TEXTFIELD_AUTOSIZE']
 
 import codecs
 import json
@@ -48,13 +48,6 @@ class COMPONENT_ALIGN(object):
     BOTTOM = 'bottom'
 
 
-class TEXTFIELD_AUTOSIZE:
-    LEFT = 'left'
-    CENTER = 'center'
-    RIGHT = 'right'
-    NONE = 'none'
-
-
 class COMPONENT_STATE(object):
     INIT = 1
     LOAD = 2
@@ -66,6 +59,14 @@ class COMPONENT_EVENT(object):
     LOADED = Event.Event()
     UPDATED = Event.Event()
     UNLOADED = Event.Event()
+
+
+# noinspection SpellCheckingInspection
+class TEXTFIELD_AUTOSIZE(object):
+    LEFT = 'left'
+    CENTER = 'center'
+    RIGHT = 'right'
+    NONE = 'none'
 
 
 # noinspection PyMethodMayBeStatic
