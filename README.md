@@ -17,6 +17,4 @@ _Позволяет динамически создавать компонент
 Подробнее в [**Wiki**](https://github.com/GambitER/GUIFlash/wiki).
 
 
-![https://img.shields.io/badge/Status-WIP-orange](https://img.shields.io/badge/Status-WIP-orange) ![https://img.shields.io/badge/Realese-Yes-green](https://img.shields.io/badge/Realese-Yes-green)
-
-![https://img.shields.io/badge/Python-2.7-blue](https://img.shields.io/badge/Python-2.7-blue)
+![https://img.shields.io/badge/Status-WIP-orange](https://img.shields.io/badge/Status-WIP-orange) ![https://img.shields.io/badge/Realese-Yes-green](https://img.shields.io/badge/Realese-Yes-green) ![https://img.shields.io/badge/Python-2.7-blue](https://img.shields.io/badge/Python-2.7-blue)
