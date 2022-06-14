@@ -19,4 +19,5 @@ _Позволяет динамически создавать компонент
 
 Status:https://img.shields.io/badge/Status-WIP-red https://img.shields.io/badge/Realese-Yes-blue
 
+Status: ![https://img.shields.io/badge/Status-WIP-red](https://img.shields.io/badge/Status-WIP-red) ![https://img.shields.io/badge/Realese-Yes-green](https://img.shields.io/badge/Realese-No-red)
 Language: ![https://img.shields.io/badge/Python-2.7-blue](https://img.shields.io/badge/Python-2.7-blue)
