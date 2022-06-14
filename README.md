@@ -15,3 +15,8 @@ Learn more @ [**Wiki**](https://github.com/CH4MPi/GUIFlash/wiki).
 _Позволяет динамически создавать компоненты для отображения текстовой и графической информации в Flash интерфейсе игры World of Tanks. Создание и управление компонентами производится через Python скрипты (модификации клиента)._
 
 Подробнее в [**Wiki**](https://github.com/GambitER/GUIFlash/wiki).
+
+
+Status:https://img.shields.io/badge/Status-WIP-red https://img.shields.io/badge/Realese-Yes-blue
+
+Sprache:https://img.shields.io/badge/Python-2.7-blue
