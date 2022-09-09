@@ -80,14 +80,6 @@
 			
 			for (var prop:String in props)
 			{
-				// TEST: glowfilter as property
-				//if (prop == 'glowfilter') {
-					//FlashUI.ui.py_log("property glowgilter found!");
-					//Properties.setGlowFilter(obj, props);
-					////props.pop(prop);
-					//continue;
-				//}
-//
 				if (obj.hasOwnProperty(prop)) {
 					obj[prop] = props[prop];
 					continue;
@@ -96,6 +88,7 @@
 			}
 
 			if (obj is UIComponentEx /* && !(obj is ImageEx)*/ ) {
+				//(obj as UIComponentEx).invalidate()
 				(obj as UIComponentEx).refresh();
 			}
 		}

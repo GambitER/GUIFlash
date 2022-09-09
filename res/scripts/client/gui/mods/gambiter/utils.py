@@ -22,24 +22,24 @@ def LOG_DEBUG(*args):
 
 def LOG_TRACE(exc=None):
     import traceback
-    print('=') * 25
+    print '=' * 25
     if exc is not None:
         LOG_ERROR(exc)
         traceback.print_exc()
     else:
         traceback.print_stack()
-    print('=') * 25
+    print '=' * 25
 
 
 def LOG_DIR(object, include=None, exclude=None):
-    print('=') * 25
+    print '=' * 25
     for attr in dir(object):
         if (include is None or attr.find(include) >= 0) and (exclude is None or attr.find(exclude) == -1):
             try:
                 LOG('GUIFlash: [DIR]', 'object.%s = %s' % (attr, getattr(object, attr)))
             except:
                 LOG('GUIFlash: [DIR]', 'object.%s = %s' % (attr, '<error>'))
-    print('=') * 25
+    print '=' * 25
 
 
 def debugLog(func):

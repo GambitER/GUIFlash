@@ -47,5 +47,11 @@
 					return ZERO;
 			}
 		}
+		
+		public static function isValidAutoSize(align:String):Boolean
+		{
+			return align == LEFT || align == RIGHT || align == CENTER || align == NONE;
+		}
+		
 	}
 }

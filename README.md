@@ -12,7 +12,7 @@ Allows you to dynamically create components for displaying text and graphic info
 Learn more @ [**Wiki**](https://github.com/CH4MPi/GUIFlash/wiki).
 
 ## Russian
-_Позволяет динамически создавать компоненты для отображения текстовой и графической информации в Flash интерфейсе игры World of Tanks. Создание и управление компонентами производится через Python скрипты (модификации клиента)._
+Позволяет динамически создавать компоненты для отображения текстовой и графической информации в Flash интерфейсе игры World of Tanks. Создание и управление компонентами производится через Python скрипты (модификации клиента)._
 
 Подробнее в [**Wiki**](https://github.com/GambitER/GUIFlash/wiki).
 

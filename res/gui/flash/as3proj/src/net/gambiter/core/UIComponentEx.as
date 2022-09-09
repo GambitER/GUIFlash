@@ -20,7 +20,8 @@
 		
 		public var _x:Number;
 		public var _y:Number;
-		private var _autoSize:String;
+
+		private var _autoSize:Boolean;
 		private var _alignX:String;
 		private var _alignY:String;		
 		private var _drag:Boolean;
@@ -37,7 +38,9 @@
 		private var _fullStatsQuestProgress:Boolean;
 		private var _epicMapOverlayVisible:Boolean;
 		private var	_epicRespawnOverlayVisible:Boolean;
-		
+		private var	_battleRoyaleRespawnVisibility:Boolean;
+		//public var py_log:Function;
+
 		public function UIComponentEx()
 		{
 			super();
@@ -50,7 +53,7 @@
 			_drag = false;
 			_limit = true;
 			_border = false;
-			_autoSize = TextFieldAutoSize.LEFT;
+			_autoSize = true;
 			_isDragging = false;
 			_alignX = Align.LEFT;
 			_alignY = Align.TOP;
@@ -61,7 +64,7 @@
 			_fullStatsQuestProgress = false;
 			_epicMapOverlayVisible = false;
 			_epicRespawnOverlayVisible = false;
-			
+			_battleRoyaleRespawnVisibility = false;
 			focusable = false;
 		}
 		
@@ -104,7 +107,8 @@
 				(!FlashUI.ui.showFullStats || _fullStats) &&
 				(!FlashUI.ui.showFullStatsQuestProgress || _fullStatsQuestProgress) &&
 				(!FlashUI.ui.epicMapOverlayVisibility || _epicMapOverlayVisible) &&
-				(!FlashUI.ui.epicRespawnOverlayVisibility || _epicRespawnOverlayVisible);
+				(!FlashUI.ui.epicRespawnOverlayVisibility || _epicRespawnOverlayVisible) &&
+				(!FlashUI.ui.battleRoyaleRespawnVisibility || _battleRoyaleRespawnVisibility);
 		}
 		
 		private function updateIndex():void		
@@ -123,13 +127,20 @@
 		}
 
 		public function updatePosition():void
-		{		
+		{
+			//FlashUI.ui.py_log("UIComponentEx: 1 x:"+ super.x + " y:"+ super.y + " parent.width:"+ parent.width + " parent.height:"+ parent.height + " width:"+ width);
 			super.x = Math.round(_x + (parent.width - width) * Align.getFactor(_alignX));
 			super.y = Math.round(_y + (parent.height - height) * Align.getFactor(_alignY));
-			if (!_limit) return;			
+			//FlashUI.ui.py_log("UIComponentEx: 2 x:" + super.x + " y:" + super.y);
+			if (!_limit) {
+				return;
+				
+			}
+			//FlashUI.ui.py_log("UIComponentEx: limnit true!");
 			var point:Object = Properties.getLimiter(this, super.x, super.y);
 			super.x = point.x;
 			super.y = point.y;
+			//FlashUI.ui.py_log("UIComponentEx: 3 x:" + super.x + " y:" + super.y);
 		}
 		
 		private function updateProps():void
@@ -138,6 +149,7 @@
 			var last_y:Number = _y;			
 			_x = Math.round(super.x - (parent.width - width) * Align.getFactor(_alignX));
 			_y = Math.round(super.y - (parent.height - height) * Align.getFactor(_alignY));
+			//FlashUI.ui.py_log("UIComponentEx: updateProps called! last_x:" + last_x + " last_y:" + last_y + " _x:"+ _x + " _y:"+_y);
 			if ((_x != last_x) || (_y != last_y))
 			{
 				py_updateProps({"x": _x, "y": _y});
@@ -162,13 +174,14 @@
 			if (_tooltip && !_isDragging) App.toolTipMgr.show(_tooltip);
 			if (_border) borderEx.show();
 		}
-		
+
 		private function onMouseOut(event:MouseEvent):void
 		{
+			if (!_drag) return;
 			if (_tooltip) App.toolTipMgr.hide();
 			if (_border) borderEx.hide();
 		}
-		
+
 		public function getHitArea():InteractiveObject
 		{
 			return this;
@@ -288,26 +301,33 @@
 		{
 			if ((Align.isValidY(value)) && (value != _alignY)) _alignY = value;
 		}
-		
-		public function get autoSize():String
+
+		public function get autoSize():Boolean
 		{
 			return _autoSize;
 		}
-		
-		public function set autoSize(value:String):void
+
+		public function set autoSize(value:Boolean):void
 		{
 			if (value != _autoSize) _autoSize = value;
 		}
 		
 		override public function set width(value:Number):void
 		{
-			_autoSize = TextFieldAutoSize.NONE;
+			_autoSize = false;
 			super.width = value;
+		}
+
+		// NOTE: only used for LabelEx component - we can move this later
+		public function setLabelSizes(width:Number, height:Number):void
+		{
+			super.width = width;
+			super.height = height;
 		}
 		
 		override public function set height(value:Number):void
 		{
-			_autoSize = TextFieldAutoSize.NONE;
+			_autoSize = false;
 			super.height = value;
 		}
 		
@@ -355,6 +375,5 @@
 		{
 			if (value != _fullStatsQuestProgress) _fullStatsQuestProgress = value;			
 		}		
-		
 	}
 }

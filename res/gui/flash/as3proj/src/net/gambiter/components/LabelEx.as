@@ -12,7 +12,7 @@
 	
 	public class LabelEx extends UIComponentEx
 	{
-		public static const NAME_FONT:String = "$Fieldfont";
+		public static const NAME_FONT:String = "$FieldFont";
 		
 		private var textField:TextField;
 		
@@ -27,7 +27,7 @@
 			
 			textField = new TextField();
 			textField.name = "label";
-			addChild(textField);
+//			addChild(textField);
 			
 			_isHtml = true;			
 			_hAlign = Align.LEFT;
@@ -35,7 +35,7 @@
 			
 			textField.width = 0;
 			textField.height = 0;
-			
+
 			textField.mouseEnabled = false;
 						
 			textField.wordWrap = false;
@@ -45,7 +45,7 @@
 			textField.backgroundColor = 0x000000;
 			
 			textField.embedFonts = true;
-			textField.autoSize = autoSize;
+			textField.autoSize = TextFieldAutoSize.LEFT;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			
 			textField.defaultTextFormat = new TextFormat(NAME_FONT, 12, 0xFFFFFF, false, false, false, "", "", "left", 0, 0, 0, 0);
@@ -59,6 +59,7 @@
 				"strength": 1,
 				"quality": 1
 			});
+			addChild(textField);
 		}
 		
 		override protected function configUI():void
@@ -102,21 +103,26 @@
 		
 		override protected function updateSize():void
 		{
-			if (autoSize != TextFieldAutoSize.NONE)
+			if (autoSize)
 			{
-				textField.autoSize = autoSize;
+				textField.autoSize = TextFieldAutoSize.LEFT;
 				// textField.width = _originalWidth;
 				// textField.height = _originalHeight;
+
+				// special case for textfield! - we need to update the super class 'width' without setting autosize to false!
+				super.setLabelSizes(textField.width, textField.height);
+				//FlashUI.ui.py_log("LabelEx:updateSize autoSize:true " + " w:" + textField.width + " h:" + textField.height + " text:"+ textField.htmlText);
 			}
 			else
 			{
 				textField.autoSize = TextFieldAutoSize.NONE;
 				textField.width = width;
 				textField.height = height;
+				//FlashUI.ui.py_log("LabelEx:updateSize autoSize:false " + " w:" + textField.width + " h:" + textField.height + " text:"+ textField.htmlText);
 			}
 			super.updateSize();
 		}
-		
+
 		public function get text():String
 		{
 			return _text;
