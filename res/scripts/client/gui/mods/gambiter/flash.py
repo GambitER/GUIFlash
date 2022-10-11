@@ -195,7 +195,7 @@ class Hooks(object):
         g_eventBus.addListener(events.GameEvent.RADIAL_MENU_CMD, self.__toggleRadialMenu, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.addListener(events.GameEvent.FULL_STATS, self.__toggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.addListener(events.GameEvent.FULL_STATS_QUEST_PROGRESS, self.__toggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.addListener(events.GameEvent.FULL_STATS_PERSONAL_RESERVES, self.__toggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(events.GameEvent.FULL_STATS_PERSONAL_RESERVES, self.__toggleFullStatsPersonalReserves, scope=EVENT_BUS_SCOPE.BATTLE)
         g_guiResetters.add(self.__onResizeStage)
 
         ctrl = self.sessionProvider.dynamic.maps
@@ -241,6 +241,7 @@ class Hooks(object):
         g_eventBus.removeListener(events.GameEvent.RADIAL_MENU_CMD, self.__toggleRadialMenu, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.removeListener(events.GameEvent.FULL_STATS, self.__toggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.removeListener(events.GameEvent.FULL_STATS_QUEST_PROGRESS, self.__toggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.removeListener(events.GameEvent.FULL_STATS_PERSONAL_RESERVES, self.__toggleFullStatsPersonalReserves, scope=EVENT_BUS_SCOPE.BATTLE)
         g_guiResetters.discard(self.__onResizeStage)
 
         ctrl = self.sessionProvider.dynamic.maps
