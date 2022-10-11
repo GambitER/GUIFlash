@@ -36,6 +36,7 @@
 		private var _radialMenu:Boolean;
 		private var _fullStats:Boolean;		
 		private var _fullStatsQuestProgress:Boolean;
+		private var _fullStatsPersonalReserves:Boolean;
 		private var _epicMapOverlayVisible:Boolean;
 		private var	_epicRespawnOverlayVisible:Boolean;
 		private var	_battleRoyaleRespawnVisibility:Boolean;
@@ -62,6 +63,7 @@
 			_radialMenu = false;
 			_fullStats = false;
 			_fullStatsQuestProgress = false;
+			_fullStatsPersonalReserves = false;
 			_epicMapOverlayVisible = false;
 			_epicRespawnOverlayVisible = false;
 			_battleRoyaleRespawnVisibility = false;
@@ -106,6 +108,7 @@
 				(!FlashUI.ui.showRadialMenu || _radialMenu) &&
 				(!FlashUI.ui.showFullStats || _fullStats) &&
 				(!FlashUI.ui.showFullStatsQuestProgress || _fullStatsQuestProgress) &&
+				(!FlashUI.ui.showFullStatsPersonalReserves || _fullStatsPersonalReserves) &&
 				(!FlashUI.ui.epicMapOverlayVisibility || _epicMapOverlayVisible) &&
 				(!FlashUI.ui.epicRespawnOverlayVisibility || _epicRespawnOverlayVisible) &&
 				(!FlashUI.ui.battleRoyaleRespawnVisibility || _battleRoyaleRespawnVisibility);
@@ -374,6 +377,16 @@
 		public function set fullStatsQuestProgress(value:Boolean):void
 		{
 			if (value != _fullStatsQuestProgress) _fullStatsQuestProgress = value;			
+		}
+
+		public function get fullStatsPersonalReserves():Boolean
+		{
+			return _fullStatsPersonalReserves;			
+		}
+		
+		public function set fullStatsPersonalReserves(value:Boolean):void
+		{
+			if (value != _fullStatsPersonalReserves) _fullStatsPersonalReserves = value;			
 		}		
 	}
 }

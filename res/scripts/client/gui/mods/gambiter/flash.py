@@ -160,6 +160,10 @@ class Views(object):
         if self.ui is not None:
             self.ui.as_fullStatsQuestProgressS(isShow)
 
+    def fullStatsPersonalReserves(self, isShow):
+        if self.ui is not None:
+            self.ui.as_fullStatsPersonalReservesS(isShow)
+
     def epicMapOverlayVisibility(self, isShow):
         if self.ui is not None:
             self.ui.as_epicMapOverlayVisibilityS(isShow)
@@ -191,6 +195,7 @@ class Hooks(object):
         g_eventBus.addListener(events.GameEvent.RADIAL_MENU_CMD, self.__toggleRadialMenu, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.addListener(events.GameEvent.FULL_STATS, self.__toggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.addListener(events.GameEvent.FULL_STATS_QUEST_PROGRESS, self.__toggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(events.GameEvent.FULL_STATS_PERSONAL_RESERVES, self.__toggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
         g_guiResetters.add(self.__onResizeStage)
 
         ctrl = self.sessionProvider.dynamic.maps
@@ -285,6 +290,10 @@ class Hooks(object):
         isDown = event.ctx['isDown']
         g_guiEvents.toggleFullStatsQuestProgress(isDown)
 
+    def __toggleFullStatsPersonalReserves(self, event):
+        isDown = event.ctx['isDown']
+        g_guiEvents.toggleFullStatsPersonalReserves(isDown)
+
     def __onMapVisibilityChanged(self, isVisible):
         g_guiEvents.epicMapOverlayVisibility(isVisible)
 
@@ -334,6 +343,9 @@ class Events(object):
 
     def toggleFullStatsQuestProgress(self, isShow):
         g_guiViews.fullStatsQuestProgress(isShow)
+
+    def toggleFullStatsPersonalReserves(self, isShow):
+        g_guiViews.fullStatsPersonalReserves(isShow)
 
     def epicMapOverlayVisibility(self, isShow):
         g_guiViews.epicMapOverlayVisibility(isShow)
@@ -387,6 +399,9 @@ class Flash_Meta(View):
 
     def as_fullStatsQuestProgressS(self, isVisible):
         return self.flashObject.as_fullStatsQuestProgress(isVisible) if self._isDAAPIInited() else None
+
+    def as_fullStatsPersonalReservesS(self, isVisible):
+        return self.flashObject.as_fullStatsPersonalReserves(isVisible) if self._isDAAPIInited() else None
 
     def as_epicMapOverlayVisibilityS(self, isVisible):
         return self.flashObject.as_epicMapOverlayVisibility(isVisible) if self._isDAAPIInited() else None

@@ -6,13 +6,13 @@
     },
     "game": {
         "folder": "X:\\wot\\ct",
-        "version": "1.18.0.0"
+        "version": "1.18.1.0"
     },
     "info": {
         "id": "guiflash",
         "author": "gambiter",
         "name": "GUIFlash",
         "description": "Flash components for use in python mods.",
-        "version": "0.5.1"
+        "version": "0.5.2"
     }
 }

@@ -26,6 +26,7 @@
 		public var showRadialMenu:Boolean;
 		public var showFullStats:Boolean;
 		public var showFullStatsQuestProgress:Boolean;
+		public var showFullStatsPersonalReserves:Boolean;
 		public var epicMapOverlayVisibility:Boolean;
 		public var epicRespawnOverlayVisibility:Boolean;
 		public var battleRoyaleRespawnVisibility:Boolean;
@@ -56,6 +57,7 @@
 			showRadialMenu = false;
 			showFullStats = false;
 			showFullStatsQuestProgress = false;
+			showFullStatsPersonalReserves = false;
 			epicMapOverlayVisibility = false;
 			epicRespawnOverlayVisibility = false;
 			battleRoyaleRespawnVisibility = false
@@ -136,7 +138,13 @@
 			if (arg != showFullStatsQuestProgress) showFullStatsQuestProgress = arg;
 			for (var alias:String in components) components[alias].updateVisible();
 		}
-		
+
+		public function as_fullStatsPersonalReserves(arg:Boolean):void
+		{
+			if (arg != showFullStatsPersonalReserves) showFullStatsPersonalReserves = arg;
+			for (var alias:String in components) components[alias].updateVisible();
+		}
+
 		public function as_epicMapOverlayVisibility(arg:Boolean):void
 		{
 			if (arg != epicMapOverlayVisibility) epicMapOverlayVisibility = arg;
