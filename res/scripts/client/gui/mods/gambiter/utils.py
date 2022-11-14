@@ -2,7 +2,6 @@
 
 IS_DEBUG = False
 
-
 def LOG(arg, *args):
     print str(arg), ' '.join([str(arg) for arg in args])
 

@@ -161,11 +161,9 @@
 		{
 			if (isVisible != battleRoyaleRespawnVisibility)
 				battleRoyaleRespawnVisibility = isVisible;
-			
 			for (var alias:String in components)
 				components[alias].updateVisible();
-			
-			py_log("as_battleRoyaleRespawnVisibility called: isVisible:" + isVisible + "!");
+			//py_log("as_battleRoyaleRespawnVisibility called: isVisible:" + isVisible + "!");
 		}
 		
 		public function as_create(alias:String, type:String, props:Object):void

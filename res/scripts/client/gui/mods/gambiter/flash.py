@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 
-__all__ = ['COMPONENT_TYPE', 'COMPONENT_ALIGN', 'COMPONENT_EVENT']
+__all__ = ['COMPONENT_TYPE', 'COMPONENT_ALIGN', 'COMPONENT_EVENT', 'GUIFlash']
 
 import codecs
 import json

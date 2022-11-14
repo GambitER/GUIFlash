@@ -2,6 +2,13 @@
 
 from flash import GUIFlash
 
+GUIFLASH_VERSION = '0.6.0'
+
+
+def getVersion():
+    return GUIFLASH_VERSION
+
+
 g_guiFlash = GUIFlash()
 
-print 'GUIFlash v0.5.2 by GambitER initialized. (maintained by CHAMPi - fork: https://github.com/CH4MPi/GUIFlash)'
+print 'GUIFlash v%s by GambitER initialized. (maintained by CHAMPi - fork: https://github.com/CH4MPi/GUIFlash)' % GUIFLASH_VERSION
