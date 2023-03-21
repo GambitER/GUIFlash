@@ -1,0 +1,22 @@
+# no idea files at all
+.idea/
+
+# we don't want compiled flash files here
+*.swc
+*.swf
+
+# we even don't want new flash folders
+/res/gui/flash/as3proj/obj
+/res/gui/flash/as3proj/swc
+
+# we also don't want compiled wotmod files
+*.wotmod
+
+# and for sure no compiled python files
+*.pyc
+
+# and we also say no to log-files
+*.log
+
+# we also no longer wan't the build folder
+/build/

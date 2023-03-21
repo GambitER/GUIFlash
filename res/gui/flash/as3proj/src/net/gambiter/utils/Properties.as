@@ -1,16 +1,20 @@
 ﻿package net.gambiter.utils
 {	
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
+	import com.greensock.TweenLite;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
+	import flash.display.LineScaleMode;
+	import flash.display.CapsStyle;
+	import flash.display.JointStyle;
 	import flash.filters.DropShadowFilter;
-	
-	import com.greensock.TweenLite;
-	
+	import flash.filters.GlowFilter;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import net.gambiter.FlashUI;
 	import net.gambiter.core.UIComponentEx;
-	import net.gambiter.components.ImageEx;
+	
+	
 
 	public class Properties
 	{		
@@ -44,13 +48,31 @@
 		{
 			if (!obj) return;
 			
-			var shadow:DropShadowFilter = new DropShadowFilter();
-
 			if (props)
 			{
-				for (var prop:String in props)
-					if (shadow.hasOwnProperty(prop)) shadow[prop] = props[prop];
+				var shadow:DropShadowFilter = new DropShadowFilter();
+				for (var prop:String in props) {
+					if (shadow.hasOwnProperty(prop)) {
+						shadow[prop] = props[prop];
+					}
+				}
 				obj.filters = [shadow];
+			}
+			else obj.filters = null;
+		}
+
+		public static function setGlowFilter(obj:DisplayObject, props:Object = null):void
+		{
+			if (!obj) return;
+			if (props)
+			{
+				var filter:GlowFilter = new GlowFilter();
+				for (var prop:String in props) {
+					if (filter.hasOwnProperty(prop)) {
+						filter[prop] = props[prop];
+					}
+				}
+				obj.filters = [filter];
 			}
 			else obj.filters = null;
 		}
@@ -58,14 +80,20 @@
 		public static function setProperty(obj:DisplayObject, props:Object):void
 		{
 			if (!obj || !props) return;
-
+			
 			for (var prop:String in props)
-			{				
-				if (obj.hasOwnProperty(prop)) { obj[prop] = props[prop]; continue; }
+			{
+				if (obj.hasOwnProperty(prop)) {
+					obj[prop] = props[prop];
+					continue;
+				}
 				FlashUI.ui.py_log("Object with linkage \'" + obj.name + "\' doesn`t contain property " + "with name \'" + prop + "\'.");
 			}
 
-			if (obj is UIComponentEx && !(obj is ImageEx)) (obj as UIComponentEx).refresh();
+			if (obj is UIComponentEx /* && !(obj is ImageEx)*/ ) {
+				//(obj as UIComponentEx).invalidate()
+				(obj as UIComponentEx).refresh();
+			}
 		}
 
 		public static function setAnimateProperty(obj:DisplayObject, props:Object, params:Object):void
@@ -93,10 +121,10 @@
 			if (obj is UIComponentEx) tweens.onUpdate = (obj as UIComponentEx).refresh;
 			
 			if (start) { tweens.onStart = setProperty; tweens.onStartParams = [obj, props]; }
-			else { tweens.onComplete = setProperty; tweens.onCompleteParams = [obj, props]; }				
+			else { tweens.onComplete = setProperty; tweens.onCompleteParams = [obj, props]; }
 
 			if (from) TweenLite.from(obj, duration, tweens);
-			else TweenLite.to(obj, duration, tweens);				
+			else TweenLite.to(obj, duration, tweens);
 		}
 
 		private static function isEmptyObject(obj:Object):Boolean
